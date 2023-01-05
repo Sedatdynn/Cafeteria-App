@@ -1,4 +1,4 @@
-import 'package:cafeteria_app/views/home/home_view.dart';
+import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawer extends StatelessWidget {

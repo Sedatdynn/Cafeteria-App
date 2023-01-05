@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:cafeteria_app/views/home/cubit/home_cubit.dart';
-import 'package:cafeteria_app/views/home/home_view.dart';
+import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:cafeteria_app/views/home/service/items_service.dart';
 import 'package:cafeteria_app/views/home/service/network_manager.dart';
 import 'package:flutter/material.dart';
@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
         create: (context) {
           return HomeCubit(
-              GeneralService(ProjectNetworkManager.instance.service, "CWZ7"))
+              GeneralService(ProjectNetworkManager.instance.service, "33O2"))
             ..fetchAllProduct();
         },
         child: MaterialApp(

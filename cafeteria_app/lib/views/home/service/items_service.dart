@@ -40,7 +40,6 @@ class GeneralService extends IGeneralService {
         int day_index = days.indexOf(today.toLowerCase());
         final dynamic_contents = modeldata.days![day_index].contents![2].foods;
         final dynamic_day = modeldata.days![day_index].day;
-
         return modeldata.days![day_index].contents![index].foods;
       }
     }

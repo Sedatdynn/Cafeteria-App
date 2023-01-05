@@ -2,11 +2,12 @@ import 'package:cafeteria_app/views/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../payment/pay_page.dart';
-import 'cubit/home_state.dart';
-import 'drawer/drawer.dart';
-import 'model/items_model.dart';
+import '../../payment/pay_page.dart';
+import '../cubit/home_state.dart';
+import '../drawer/drawer.dart';
+import '../model/items_model.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -23,12 +24,12 @@ class _HomeViewState extends State<HomeView> {
   final String starchesImage = "assets/category/starches.jpg";
   final String starchesText = "Starches";
   final String labelText = "search for food, cafe, etc.";
+  SharedPreferences? prefs;
 
   @override
   Widget build(BuildContext context) {
     final double _width = MediaQuery.of(context).size.width;
     final double _height = MediaQuery.of(context).size.height;
-    // DateFormat('EEEE').format(DateTime.now());
 
     return SafeArea(
       child: Scaffold(
@@ -55,8 +56,8 @@ class _HomeViewState extends State<HomeView> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
+                          buildSearchTextField(context),
                           buildMainTextTitle(),
-                          buildSearchTextField(context)
                         ],
                       ),
                       SizedBox(
@@ -144,7 +145,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
               );
             }
-            return Text("data");
+            return const Text("data");
           },
         ),
       ),
@@ -169,28 +170,33 @@ class _HomeViewState extends State<HomeView> {
             color: Colors.red,
             borderRadius: BorderRadius.circular(16),
           ),
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-                color: items[index]!.isSelected! ? Colors.blue : Colors.white,
-                borderRadius: BorderRadius.circular(16)),
-            // width: width * 0.25,
-            child: Column(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(16),
-                  child: Image.asset(
-                    "assets/category/starters.jpg",
-                    height: MediaQuery.of(context).size.height * 0.1,
+          child: InkWell(
+            onTap: () async {
+              prefs = await SharedPreferences.getInstance();
+
+              checkSelectFee(items, index, context);
+            },
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                  color: prefs?.getBool(items[index]!.fname!) ?? false
+                      ? Colors.green
+                      : Colors.white,
+                  borderRadius: BorderRadius.circular(16)),
+              // width: width * 0.25,
+              child: Column(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(16),
+                    child: Image.asset(
+                      "assets/category/starters.jpg",
+                      height: MediaQuery.of(context).size.height * 0.1,
+                    ),
                   ),
-                ),
-                GestureDetector(
-                    onTap: () {
-                      checkSelectFee(items, index, context);
-                    },
-                    child: Text(items[index]!.fname.toString())),
-                Text("${items[index]!.fiyat} tl")
-              ],
+                  Text(items[index]!.fname.toString()),
+                  Text("${items[index]!.fiyat} tl")
+                ],
+              ),
             ),
           ),
         );
@@ -198,15 +204,45 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void checkSelectFee(List<Foods?> items, int index, BuildContext context) {
+  void checkSelectFee(
+      List<Foods?> items, int index, BuildContext context) async {
+    prefs = await SharedPreferences.getInstance();
+
+    correctCheck() async {
+      await prefs!.setBool(items[index]!.fname!, items[index]!.isSelected!);
+    }
+
+    falseCheck() async {
+      await prefs!
+          .setBool(items[index]!.fname!, items[index]!.isSelected ?? false);
+      print("**************" + prefs!.getBool(items[index]!.fname!).toString());
+    }
+
     return setState(() {
       items[index]!.isSelected = !items[index]!.isSelected!;
-      if (items[index]!.isSelected!) {
+
+      if (items[index]!.isSelected! &&
+          !context
+              .read<HomeCubit>()
+              .isSelectFood
+              .contains(items[index]!.fname)) {
+        correctCheck();
         context.read<HomeCubit>().isSelectFood.add(items[index]!.fname);
         context.read<HomeCubit>().eachFoodPrice.add(items[index]!.fiyat);
         context.read<HomeCubit>().totalPay += items[index]!.fiyat!;
-      } else {
+      } else if (context
+          .read<HomeCubit>()
+          .isSelectFood
+          .contains(items[index]!.fname)) {
+        falseCheck();
+        final name = items[index]!.fname!;
+        context.read<HomeCubit>().isSelectFood.remove(name);
+        context.read<HomeCubit>().eachFoodPrice.remove(items[index]!.fiyat);
+
         context.read<HomeCubit>().totalPay -= items[index]!.fiyat!;
+        prefs!.remove(items[index]!.fname!);
+      } else {
+        prefs!.remove(items[index]!.fname!);
       }
     });
   }
@@ -242,26 +278,23 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  SizedBox buildSearchTextField(BuildContext context) {
-    return SizedBox(
-      width: MediaQuery.of(context).size.width * 0.45,
-      height: MediaQuery.of(context).size.height * 0.04,
-      child: TextField(
-        decoration: InputDecoration(
-          labelText: labelText,
-          prefixIcon: const Icon(Icons.search),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
+  Widget buildSearchTextField(BuildContext context) {
+    return Text(
+      checkDay(),
+      style: Theme.of(context)
+          .textTheme
+          .headline5
+          ?.copyWith(fontWeight: FontWeight.bold),
     );
   }
 
   Text buildMainTextTitle() {
     return Text(
       mainTitle,
-      style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      style: Theme.of(context)
+          .textTheme
+          .headline5
+          ?.copyWith(fontWeight: FontWeight.bold),
     );
   }
 }

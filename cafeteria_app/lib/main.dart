@@ -21,14 +21,14 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
         create: (context) {
           return HomeCubit(
-              GeneralService(ProjectNetworkManager.instance.service, "33O2"))
+              GeneralService(ProjectNetworkManager.instance.service, "EL0E"))
             ..fetchAllProduct();
         },
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Flutter ',
           theme: ThemeData(
-            primarySwatch: Colors.blue,
+            primarySwatch: Colors.orange,
           ),
           home: const HomeView(),
         ));

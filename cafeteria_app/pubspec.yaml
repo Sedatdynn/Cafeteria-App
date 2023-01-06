@@ -37,7 +37,7 @@ dependencies:
   flutter_bloc: ^8.1.1
   intl: ^0.17.0
   shared_preferences: ^2.0.15
-
+  fluttertoast: ^8.1.2
 dev_dependencies:
   flutter_lints: ^2.0.0
   flutter_test:
@@ -55,6 +55,10 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/category/
+    - assets/meals/
+    - assets/button/
+
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

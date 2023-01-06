@@ -1,3 +1,4 @@
+import 'package:cafeteria_app/core/const/responsive/responsive.dart';
 import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class NavigationDrawer extends StatelessWidget {
           padding: padding,
           children: [
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.04,
+              height: context.dynamicHeight(0.04),
             ),
             buildMenuItem(
               text: "Home",
@@ -33,13 +34,13 @@ class NavigationDrawer extends StatelessWidget {
               icon: Icons.settings,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.3,
+              height: context.dynamicHeight(0.3),
             ),
             const Divider(
-              color: Colors.purple,
+              color: Colors.orange,
             ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.05,
+              height: context.dynamicHeight(0.05),
             ),
             buildMenuItem(
               text: "Log out",
@@ -67,7 +68,7 @@ void selectedItem(BuildContext context, int index) {
 
 buildMenuItem(
     {required String text, required IconData icon, VoidCallback? onClicked}) {
-  const color = Colors.purple;
+  const color = Colors.indigo;
   return ListTile(
     leading: Icon(
       icon,

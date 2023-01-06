@@ -1,10 +1,12 @@
+import 'package:cafeteria_app/core/const/border/border_radi.dart';
+import 'package:cafeteria_app/core/const/responsive/responsive.dart';
 import 'package:cafeteria_app/views/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../payment/pay_page.dart';
+import '../../order/order_page.dart';
 import '../cubit/home_state.dart';
 import '../drawer/drawer.dart';
 import '../model/items_model.dart';
@@ -28,9 +30,6 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    final double _width = MediaQuery.of(context).size.width;
-    final double _height = MediaQuery.of(context).size.height;
-
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -61,7 +60,7 @@ class _HomeViewState extends State<HomeView> {
                         ],
                       ),
                       SizedBox(
-                        height: _height * 0.02,
+                        height: context.dynamicHeight(0.02),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,29 +69,29 @@ class _HomeViewState extends State<HomeView> {
                             onTap: () {
                               context.read<HomeCubit>().changeIndex(0);
                             },
-                            child: buildCategoryCard(
-                                _width, startersImage, startersText, context),
+                            child: buildCategoryCard(context.width,
+                                startersImage, startersText, context),
                           ),
                           InkWell(
                             onTap: () {
                               context.read<HomeCubit>().changeIndex(1);
                             },
-                            child: buildCategoryCard(
-                                _width, starchesImage, starchesText, context),
+                            child: buildCategoryCard(context.width,
+                                starchesImage, starchesText, context),
                           ),
                           InkWell(
                               onTap: () {
                                 context.read<HomeCubit>().changeIndex(2);
                               },
                               child: buildCategoryCard(
-                                  _width, meatImage, meatText, context)),
+                                  context.width, meatImage, meatText, context)),
                         ],
                       ),
                       SizedBox(
-                        height: _height * 0.03,
+                        height: context.dynamicHeight(0.03),
                       ),
                       SizedBox(
-                        height: _height * 0.5,
+                        height: context.dynamicHeight(0.5),
                         child: buildFoodsBody(
                           context,
                           context.watch<HomeCubit>().allProduct,
@@ -102,38 +101,45 @@ class _HomeViewState extends State<HomeView> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Container(
+                            decoration: const BoxDecoration(
+                                color: Colors.orange,
+                                borderRadius: BorderRadi.LowCircular),
                             width: 100,
                             height: 60,
-                            color: Colors.purple,
                             child: Center(
                               child: Text(
                                 "${context.watch<HomeCubit>().totalPay} tl",
-                                style: const TextStyle(fontSize: 24),
+                                style: Theme.of(context).textTheme.headline5,
                               ),
                             ),
                           ),
                           InkWell(
-                            onTap: () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PaymentView(
-                                      totalMoney:
-                                          context.watch<HomeCubit>().totalPay,
-                                      isSelectedFood: context
-                                          .watch<HomeCubit>()
-                                          .isSelectFood,
-                                      eachFoodPrice: context
-                                          .watch<HomeCubit>()
-                                          .eachFoodPrice),
-                                )),
+                            onTap: () => context.read<HomeCubit>().totalPay > 0
+                                ? Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => OrderView(
+                                          totalMoney: context
+                                              .watch<HomeCubit>()
+                                              .totalPay,
+                                          isSelectedFood: context
+                                              .watch<HomeCubit>()
+                                              .isSelectFood,
+                                          eachFoodPrice: context
+                                              .watch<HomeCubit>()
+                                              .eachFoodPrice),
+                                    ))
+                                : null,
                             child: Container(
-                              width: 100,
+                              padding: EdgeInsets.all(6),
+                              decoration: const BoxDecoration(
+                                  color: Colors.orange,
+                                  borderRadius: BorderRadi.LowCircular),
                               height: 60,
-                              color: Colors.purple,
-                              child: const Center(
+                              child: Center(
                                 child: Text(
-                                  "Go to payment tl",
-                                  style: TextStyle(fontSize: 24),
+                                  "Payment",
+                                  style: Theme.of(context).textTheme.headline5,
                                 ),
                               ),
                             ),
@@ -160,15 +166,15 @@ class _HomeViewState extends State<HomeView> {
       gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        mainAxisExtent: MediaQuery.of(context).size.height * 0.18,
-        maxCrossAxisExtent: MediaQuery.of(context).size.height * 0.3,
+        mainAxisExtent: context.dynamicHeight(0.18),
+        maxCrossAxisExtent: context.dynamicHeight(0.3),
       ),
-      itemCount: 2,
+      itemCount: items.length,
       itemBuilder: (context, index) {
         return Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.red,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadi.LowCircular,
           ),
           child: InkWell(
             onTap: () async {
@@ -180,17 +186,18 @@ class _HomeViewState extends State<HomeView> {
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                   color: prefs?.getBool(items[index]!.fname!) ?? false
-                      ? Colors.green
+                      ? Colors.indigo.shade100
                       : Colors.white,
-                  borderRadius: BorderRadius.circular(16)),
+                  borderRadius: BorderRadi.midCircular),
               // width: width * 0.25,
               child: Column(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadi.midCircular,
                     child: Image.asset(
-                      "assets/category/starters.jpg",
-                      height: MediaQuery.of(context).size.height * 0.1,
+                      "assets/meals/${items[index]!.fname}.png",
+                      height: context.dynamicHeight(0.1),
+                      width: context.dynamicWidth(0.3),
                     ),
                   ),
                   Text(items[index]!.fname.toString()),
@@ -257,16 +264,16 @@ class _HomeViewState extends State<HomeView> {
       double width, String name, String data, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(16)),
-      width: width * 0.25,
+      decoration: const BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadi.midCircular),
+      width: width * 0.28,
       child: Column(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadi.midCircular,
             child: Image.asset(
               name,
-              height: MediaQuery.of(context).size.height * 0.1,
+              height: context.dynamicHeight(0.1),
             ),
           ),
           Text(

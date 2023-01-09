@@ -1,4 +1,6 @@
 import 'package:cafeteria_app/core/const/responsive/responsive.dart';
+import 'package:cafeteria_app/core/theme/color/colors.dart';
+import 'package:cafeteria_app/product/constant/duration.dart';
 import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,7 +35,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.orange,
+        backgroundColor: AppColors.mainPrimary,
       ),
       body: Padding(
         padding: context.midAllPadding,
@@ -139,7 +141,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
       child: InkWell(
         onTap: () {
           warningToast(context, paymentCompletedSuccessfully);
-          Future.delayed(const Duration(seconds: 2));
+          Future.delayed(CustomDuration.lowDuration);
           context.read<HomeCubit>().isSelectFood.clear();
           context.read<HomeCubit>().eachFoodPrice.clear();
           context.read<HomeCubit>().totalPay = 0;
@@ -151,16 +153,15 @@ class _PaymentPageViewState extends State<PaymentPageView> {
         child: Container(
           padding: context.minAllPadding,
           decoration: const BoxDecoration(
-              color: Colors.orange, borderRadius: BorderRadi.midCircular),
+              color: AppColors.mainPrimary,
+              borderRadius: BorderRadi.midCircular),
           height: context.dynamicHeight(0.08),
           width: context.dynamicWidth(0.6),
           child: Center(
             child: Text(
               completePayment,
-              style: Theme.of(context)
-                  .textTheme
-                  .subtitle1
-                  ?.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                  color: AppColors.black, fontWeight: FontWeight.bold),
             ),
           ),
         ),

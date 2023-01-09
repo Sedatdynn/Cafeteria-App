@@ -1,5 +1,6 @@
 import 'package:cafeteria_app/core/const/border/border_radi.dart';
 import 'package:cafeteria_app/core/const/responsive/responsive.dart';
+import 'package:cafeteria_app/core/theme/color/colors.dart';
 import 'package:cafeteria_app/views/home/cubit/home_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../order/order_page.dart';
 import '../cubit/home_state.dart';
-import '../drawer/drawer.dart';
+import '../../drawer/drawer.dart';
 import '../model/items_model.dart';
 
 class HomeView extends StatefulWidget {
@@ -39,7 +40,7 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
         drawer: const NavigationDrawer(),
-        backgroundColor: Colors.grey.shade300,
+        backgroundColor: AppColors.lightGrey,
         body: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading || state is HomeInitial) {
@@ -102,7 +103,7 @@ class _HomeViewState extends State<HomeView> {
                         children: [
                           Container(
                             decoration: const BoxDecoration(
-                                color: Colors.orange,
+                                color: AppColors.mainPrimary,
                                 borderRadius: BorderRadi.LowCircular),
                             width: 100,
                             height: 60,
@@ -131,9 +132,9 @@ class _HomeViewState extends State<HomeView> {
                                     ))
                                 : null,
                             child: Container(
-                              padding: EdgeInsets.all(6),
+                              padding: context.minAllPadding,
                               decoration: const BoxDecoration(
-                                  color: Colors.orange,
+                                  color: AppColors.mainPrimary,
                                   borderRadius: BorderRadi.LowCircular),
                               height: 60,
                               child: Center(
@@ -173,7 +174,7 @@ class _HomeViewState extends State<HomeView> {
       itemBuilder: (context, index) {
         return Container(
           decoration: const BoxDecoration(
-            color: Colors.red,
+            color: AppColors.error,
             borderRadius: BorderRadi.LowCircular,
           ),
           child: InkWell(
@@ -185,9 +186,9 @@ class _HomeViewState extends State<HomeView> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  color: prefs?.getBool(items[index]!.fname!) ?? false
-                      ? Colors.indigo.shade100
-                      : Colors.white,
+                  color: (prefs?.getBool(items[index]!.fname!) ?? false)
+                      ? AppColors.lightIndigo
+                      : AppColors.white,
                   borderRadius: BorderRadi.midCircular),
               // width: width * 0.25,
               child: Column(
@@ -216,13 +217,11 @@ class _HomeViewState extends State<HomeView> {
     prefs = await SharedPreferences.getInstance();
 
     correctCheck() async {
-      await prefs!.setBool(items[index]!.fname!, items[index]!.isSelected!);
+      await prefs?.setBool(items[index]!.fname!, true);
     }
 
     falseCheck() async {
-      await prefs!
-          .setBool(items[index]!.fname!, items[index]!.isSelected ?? false);
-      print("**************" + prefs!.getBool(items[index]!.fname!).toString());
+      await prefs?.setBool(items[index]!.fname!, false);
     }
 
     return setState(() {
@@ -242,6 +241,7 @@ class _HomeViewState extends State<HomeView> {
           .isSelectFood
           .contains(items[index]!.fname)) {
         falseCheck();
+
         final name = items[index]!.fname!;
         context.read<HomeCubit>().isSelectFood.remove(name);
         context.read<HomeCubit>().eachFoodPrice.remove(items[index]!.fiyat);
@@ -265,7 +265,7 @@ class _HomeViewState extends State<HomeView> {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadi.midCircular),
+          color: AppColors.white, borderRadius: BorderRadi.midCircular),
       width: width * 0.28,
       child: Column(
         children: [

@@ -1,11 +1,18 @@
 import 'dart:math';
 
 import 'package:cafeteria_app/core/const/responsive/responsive.dart';
+import 'package:cafeteria_app/core/theme/color/colors.dart';
+import 'package:cafeteria_app/product/constant/duration.dart';
 import 'package:cafeteria_app/product/constant/warning_message.dart';
+import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:cafeteria_app/views/payment/payment.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/const/border/border_radi.dart';
+import '../home/cubit/home_cubit.dart';
+import '../home/service/items_service.dart';
+import '../home/service/network_manager.dart';
 
 class OrderView extends StatefulWidget {
   final totalMoney;
@@ -68,8 +75,8 @@ class _OrderViewState extends State<OrderView> {
                             vertical: context.dynamicHeight(0.005)),
                         height: context.dynamicHeight(0.15),
                         width: context.width,
-                        decoration: BoxDecoration(
-                            color: Colors.indigo.shade200,
+                        decoration: const BoxDecoration(
+                            color: AppColors.lightIndigo,
                             borderRadius: BorderRadi.LowCircular),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -147,9 +154,9 @@ class _OrderViewState extends State<OrderView> {
   }
 
   checkEmployee() async {
-    final _random = new Random();
+    final random = new Random();
     var values = allEmployees.keys.toList();
-    String element = values[_random.nextInt(values.length)];
+    String element = values[random.nextInt(values.length)];
     int freeFoodCount = allEmployees[element] ?? 0;
     print(element);
     print(freeFoodCount);
@@ -161,10 +168,20 @@ class _OrderViewState extends State<OrderView> {
         } else if (widget.isSelectedFood.contains("Makarna") &&
             widget.isSelectedFood.contains("Pilav")) {
           await warningToast(context, "Hatali makarna pilav secimi!!");
+        } else if (freeFoodCount >= 0) {
+          await warningToast(context, "$element odeme islemi basarili.");
+          Future.delayed(CustomDuration.lowDuration);
+          context.read<HomeCubit>().isSelectFood.clear();
+          context.read<HomeCubit>().eachFoodPrice.clear();
+          context.read<HomeCubit>().totalPay = 0;
+          Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeView()),
+              (route) => false);
         }
       }
     } else {
-      await warningToast(context, "$element yemek hakkin bulunmamaktadir.");
+      await warningToast(context, "$element  yemek hakkin bulunmamaktadir.");
     }
   }
 }

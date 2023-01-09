@@ -1,4 +1,5 @@
 import 'package:cafeteria_app/core/const/responsive/responsive.dart';
+import 'package:cafeteria_app/core/theme/color/colors.dart';
 import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +38,7 @@ class NavigationDrawer extends StatelessWidget {
               height: context.dynamicHeight(0.3),
             ),
             const Divider(
-              color: Colors.orange,
+              color: AppColors.divider,
             ),
             SizedBox(
               height: context.dynamicHeight(0.05),
@@ -68,7 +69,7 @@ void selectedItem(BuildContext context, int index) {
 
 buildMenuItem(
     {required String text, required IconData icon, VoidCallback? onClicked}) {
-  const color = Colors.indigo;
+  const color = AppColors.indigo;
   return ListTile(
     leading: Icon(
       icon,

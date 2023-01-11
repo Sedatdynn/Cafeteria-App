@@ -1,5 +1,6 @@
 import 'package:cafeteria_app/core/const/responsive/responsive.dart';
 import 'package:cafeteria_app/core/theme/color/colors.dart';
+import 'package:cafeteria_app/product/constant/texts/app_texts.dart';
 import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -22,16 +23,16 @@ class NavigationDrawer extends StatelessWidget {
               height: context.dynamicHeight(0.04),
             ),
             buildMenuItem(
-              text: "Home",
+              text: DrawerTexts.drawerHome,
               icon: Icons.home,
               onClicked: () => selectedItem(context, 0),
             ),
             buildMenuItem(
-              text: "History",
+              text: DrawerTexts.drawerHistory,
               icon: Icons.history,
             ),
             buildMenuItem(
-              text: "Settings",
+              text: DrawerTexts.drawerSettings,
               icon: Icons.settings,
             ),
             SizedBox(
@@ -44,7 +45,7 @@ class NavigationDrawer extends StatelessWidget {
               height: context.dynamicHeight(0.05),
             ),
             buildMenuItem(
-              text: "Log out",
+              text: DrawerTexts.drawerOut,
               icon: Icons.logout,
             ),
           ],

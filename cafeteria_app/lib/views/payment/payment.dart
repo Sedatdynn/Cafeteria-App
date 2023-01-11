@@ -1,14 +1,10 @@
-import 'package:cafeteria_app/core/const/responsive/responsive.dart';
-import 'package:cafeteria_app/core/theme/color/colors.dart';
-import 'package:cafeteria_app/product/constant/duration.dart';
-import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../core/const/border/border_radi.dart';
-import '../../product/constant/warning_message.dart';
-import '../home/cubit/home_cubit.dart';
+import 'package:cafeteria_app/core/const/border_responsive_shelf.dart';
+import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
+import '../../product/constant/product_const_shelf.dart';
+import '../home/home_shelf.dart';
 
 class PaymentPageView extends StatefulWidget {
   int totalFee = 0;
@@ -21,12 +17,6 @@ class PaymentPageView extends StatefulWidget {
 }
 
 class _PaymentPageViewState extends State<PaymentPageView> {
-  final String paymentCompletedSuccessfully = 'Payment completed successfully';
-  final String completePayment = 'Complete Payment';
-  final String cardNumber = 'Card number';
-  final String cardInformation = 'Card information';
-  final String mmyy = 'MM/YY';
-  final String cvc = 'CVC';
   TextEditingController cardController = TextEditingController();
   TextEditingController cvcContoller = TextEditingController();
   TextEditingController dateController = TextEditingController();
@@ -34,40 +24,49 @@ class _PaymentPageViewState extends State<PaymentPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: AppColors.mainPrimary,
-      ),
-      body: Padding(
-        padding: context.midAllPadding,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
-                child: buildTitleText(context),
-              ),
-              SizedBox(
-                height: context.dynamicHeight(0.1),
-              ),
-              buildCardInfoText(context),
-              SizedBox(
-                height: context.dynamicHeight(0.01),
-              ),
-              buildCardNumberTextformField(),
-              SizedBox(
-                height: context.dynamicHeight(0.03),
-              ),
-              buildDateTextformField(),
-              SizedBox(
-                height: context.dynamicHeight(0.03),
-              ),
-              buildCvcTextformField(),
-              SizedBox(
-                height: context.dynamicHeight(0.03),
-              ),
-              buildButton(context)
-            ],
-          ),
+      appBar: buildCustomAppBar(),
+      body: buildMainBody(context),
+    );
+  }
+
+  AppBar buildCustomAppBar() {
+    return AppBar(
+      backgroundColor: AppColors.mainPrimary,
+      title: const Text(MainTexts.appTitle),
+    );
+  }
+
+  Padding buildMainBody(BuildContext context) {
+    return Padding(
+      padding: context.midAllPadding,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: buildTitleText(context),
+            ),
+            SizedBox(
+              height: context.dynamicHeight(0.1),
+            ),
+            buildCardInfoText(context),
+            SizedBox(
+              height: context.dynamicHeight(0.01),
+            ),
+            buildCardNumberTextformField(),
+            SizedBox(
+              height: context.dynamicHeight(0.03),
+            ),
+            buildDateTextformField(),
+            SizedBox(
+              height: context.dynamicHeight(0.03),
+            ),
+            buildCvcTextformField(),
+            SizedBox(
+              height: context.dynamicHeight(0.03),
+            ),
+            buildButton(context)
+          ],
         ),
       ),
     );
@@ -82,7 +81,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
 
   Text buildCardInfoText(BuildContext context) {
     return Text(
-      cardInformation,
+      PaymentTexts.cardInfo,
       style: Theme.of(context).textTheme.bodyLarge,
     );
   }
@@ -95,11 +94,11 @@ class _PaymentPageViewState extends State<PaymentPageView> {
       ],
       maxLength: 16,
       controller: cardController,
-      decoration: InputDecoration(
-          border: const OutlineInputBorder(
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(
             borderRadius: BorderRadi.midCircular,
           ),
-          labelText: cardNumber),
+          labelText: PaymentTexts.cardNumber),
     );
   }
 
@@ -107,16 +106,12 @@ class _PaymentPageViewState extends State<PaymentPageView> {
     return TextFormField(
       maxLength: 5,
       keyboardType: TextInputType.datetime,
-
-      // validator: (value) =>
-      //     (value ?? "").length > 3 ? null : "",
       controller: dateController,
-
-      decoration: InputDecoration(
-          border: const OutlineInputBorder(
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(
             borderRadius: BorderRadi.midCircular,
           ),
-          labelText: "${mmyy} "),
+          labelText: PaymentTexts.mmyyText),
     );
   }
 
@@ -128,11 +123,11 @@ class _PaymentPageViewState extends State<PaymentPageView> {
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
       ],
       controller: cvcContoller,
-      decoration: InputDecoration(
-          border: const OutlineInputBorder(
+      decoration: const InputDecoration(
+          border: OutlineInputBorder(
             borderRadius: BorderRadi.midCircular,
           ),
-          labelText: cvc),
+          labelText: PaymentTexts.cvcText),
     );
   }
 
@@ -140,7 +135,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
     return Center(
       child: InkWell(
         onTap: () {
-          warningToast(context, paymentCompletedSuccessfully);
+          warningToast(context, PaymentTexts.paySuccess);
           Future.delayed(CustomDuration.lowDuration);
           context.read<HomeCubit>().isSelectFood.clear();
           context.read<HomeCubit>().eachFoodPrice.clear();
@@ -159,7 +154,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
           width: context.dynamicWidth(0.6),
           child: Center(
             child: Text(
-              completePayment,
+              PaymentTexts.payComplete,
               style: Theme.of(context).textTheme.subtitle1?.copyWith(
                   color: AppColors.black, fontWeight: FontWeight.bold),
             ),

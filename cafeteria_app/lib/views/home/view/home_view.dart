@@ -1,16 +1,13 @@
-import 'package:cafeteria_app/core/const/border/border_radi.dart';
-import 'package:cafeteria_app/core/const/responsive/responsive.dart';
-import 'package:cafeteria_app/core/theme/color/colors.dart';
-import 'package:cafeteria_app/views/home/cubit/home_cubit.dart';
+import 'package:cafeteria_app/core/const/border_responsive_shelf.dart';
+import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
+import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
+import 'package:cafeteria_app/views/home/home_shelf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../order/order_page.dart';
-import '../cubit/home_state.dart';
 import '../../drawer/drawer.dart';
-import '../model/items_model.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -19,26 +16,12 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final String mainTitle = "Menu Category";
-  final String meatImage = "assets/category/meat.jpg";
-  final String meatText = "Meat";
-  final String startersImage = "assets/category/starters.jpg";
-  final String startersText = "Starters";
-  final String starchesImage = "assets/category/starches.jpg";
-  final String starchesText = "Starches";
-  final String labelText = "search for food, cafe, etc.";
   SharedPreferences? prefs;
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text(
-            'Cafeteria App',
-          ),
-        ),
+        appBar: buildCustomAppBar(),
         drawer: const NavigationDrawer(),
         backgroundColor: AppColors.lightGrey,
         body: BlocBuilder<HomeCubit, HomeState>(
@@ -48,112 +31,138 @@ class _HomeViewState extends State<HomeView> {
                 child: CircularProgressIndicator(),
               );
             } else if (state is HomeLoaded) {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          buildSearchTextField(context),
-                          buildMainTextTitle(),
-                        ],
-                      ),
-                      SizedBox(
-                        height: context.dynamicHeight(0.02),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              context.read<HomeCubit>().changeIndex(0);
-                            },
-                            child: buildCategoryCard(context.width,
-                                startersImage, startersText, context),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              context.read<HomeCubit>().changeIndex(1);
-                            },
-                            child: buildCategoryCard(context.width,
-                                starchesImage, starchesText, context),
-                          ),
-                          InkWell(
-                              onTap: () {
-                                context.read<HomeCubit>().changeIndex(2);
-                              },
-                              child: buildCategoryCard(
-                                  context.width, meatImage, meatText, context)),
-                        ],
-                      ),
-                      SizedBox(
-                        height: context.dynamicHeight(0.03),
-                      ),
-                      SizedBox(
-                        height: context.dynamicHeight(0.5),
-                        child: buildFoodsBody(
-                          context,
-                          context.watch<HomeCubit>().allProduct,
-                        ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                            decoration: const BoxDecoration(
-                                color: AppColors.mainPrimary,
-                                borderRadius: BorderRadi.LowCircular),
-                            width: 100,
-                            height: 60,
-                            child: Center(
-                              child: Text(
-                                "${context.watch<HomeCubit>().totalPay} tl",
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () => context.read<HomeCubit>().totalPay > 0
-                                ? Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => OrderView(
-                                          totalMoney: context
-                                              .watch<HomeCubit>()
-                                              .totalPay,
-                                          isSelectedFood: context
-                                              .watch<HomeCubit>()
-                                              .isSelectFood,
-                                          eachFoodPrice: context
-                                              .watch<HomeCubit>()
-                                              .eachFoodPrice),
-                                    ))
-                                : null,
-                            child: Container(
-                              padding: context.minAllPadding,
-                              decoration: const BoxDecoration(
-                                  color: AppColors.mainPrimary,
-                                  borderRadius: BorderRadi.LowCircular),
-                              height: 60,
-                              child: Center(
-                                child: Text(
-                                  "Payment",
-                                  style: Theme.of(context).textTheme.headline5,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              );
+              return buildMainBody(context);
             }
             return const Text("data");
           },
+        ),
+      ),
+    );
+  }
+
+  AppBar buildCustomAppBar() {
+    return AppBar(
+      centerTitle: true,
+      title: const Text(
+        MainTexts.appTitle,
+      ),
+    );
+  }
+
+  SingleChildScrollView buildMainBody(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                buildSearchTextField(context),
+                buildMainTextTitle(),
+              ],
+            ),
+            SizedBox(
+              height: context.dynamicHeight(0.02),
+            ),
+            buildTopLunchItems(context),
+            SizedBox(
+              height: context.dynamicHeight(0.03),
+            ),
+            SizedBox(
+              height: context.dynamicHeight(0.5),
+              child: buildFoodsBody(
+                context,
+                context.watch<HomeCubit>().allProduct,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                buildPriceButton(context),
+                buildPaymentButton(context),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Row buildTopLunchItems(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        InkWell(
+          onTap: () {
+            context.read<HomeCubit>().changeIndex(0);
+          },
+          child: buildCategoryCard(
+              context.width,
+              ImagePaths.starters.startersToWidget(context.dynamicHeight(0.1)),
+              HomeTexts.startersText,
+              context),
+        ),
+        InkWell(
+          onTap: () {
+            context.read<HomeCubit>().changeIndex(1);
+          },
+          child: buildCategoryCard(
+              context.width,
+              ImagePaths.starches.starchesToWidget(context.dynamicHeight(0.1)),
+              HomeTexts.starchesText,
+              context),
+        ),
+        InkWell(
+            onTap: () {
+              context.read<HomeCubit>().changeIndex(2);
+            },
+            child: buildCategoryCard(
+                context.width,
+                ImagePaths.meat.meatToWidget(context.dynamicHeight(0.1)),
+                HomeTexts.meatText,
+                context)),
+      ],
+    );
+  }
+
+  Container buildPriceButton(BuildContext context) {
+    return Container(
+      decoration: const BoxDecoration(
+          color: AppColors.mainPrimary, borderRadius: BorderRadi.LowCircular),
+      width: 100,
+      height: 60,
+      child: Center(
+        child: Text(
+          "${context.watch<HomeCubit>().totalPay} tl",
+          style: Theme.of(context).textTheme.headline5,
+        ),
+      ),
+    );
+  }
+
+  InkWell buildPaymentButton(BuildContext context) {
+    return InkWell(
+      onTap: () => context.read<HomeCubit>().totalPay > 0
+          ? Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => OrderView(
+                    totalMoney: context.watch<HomeCubit>().totalPay,
+                    isSelectedFood: context.watch<HomeCubit>().isSelectFood,
+                    eachFoodPrice: context.watch<HomeCubit>().eachFoodPrice),
+              ))
+          : null,
+      child: Container(
+        padding: context.minAllPadding,
+        decoration: const BoxDecoration(
+            color: AppColors.mainPrimary, borderRadius: BorderRadi.LowCircular),
+        height: 60,
+        child: Center(
+          child: Text(
+            HomeTexts.paymentText,
+            style: Theme.of(context).textTheme.headline5,
+          ),
         ),
       ),
     );
@@ -186,7 +195,7 @@ class _HomeViewState extends State<HomeView> {
             child: Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                  color: (prefs?.getBool(items[index]!.fname!) ?? false)
+                  color: getSelect(items[index]!.fname!)
                       ? AppColors.lightIndigo
                       : AppColors.white,
                   borderRadius: BorderRadi.midCircular),
@@ -210,6 +219,11 @@ class _HomeViewState extends State<HomeView> {
         );
       },
     );
+  }
+
+  bool getSelect(String key) {
+    bool select = prefs?.getBool(key) ?? false;
+    return select;
   }
 
   void checkSelectFee(
@@ -261,7 +275,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Container buildCategoryCard(
-      double width, String name, String data, BuildContext context) {
+      double width, Widget image, String data, BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
@@ -271,10 +285,7 @@ class _HomeViewState extends State<HomeView> {
         children: [
           ClipRRect(
             borderRadius: BorderRadi.midCircular,
-            child: Image.asset(
-              name,
-              height: context.dynamicHeight(0.1),
-            ),
+            child: image,
           ),
           Text(
             data,
@@ -297,11 +308,50 @@ class _HomeViewState extends State<HomeView> {
 
   Text buildMainTextTitle() {
     return Text(
-      mainTitle,
+      HomeTexts.homeMenuText,
       style: Theme.of(context)
           .textTheme
           .headline5
           ?.copyWith(fontWeight: FontWeight.bold),
+    );
+  }
+}
+
+enum ImagePaths { starters, meat, starches }
+
+extension ImagePathExtesion on ImagePaths {
+  String startersPath() {
+    return "assets/category/${ImagePaths.starters.name}.jpg";
+  }
+
+  String meatPath() {
+    return "assets/category/${ImagePaths.meat.name}.jpg";
+  }
+
+  String starchesPath() {
+    return "assets/category/${ImagePaths.meat.name}.jpg";
+  }
+
+  Widget startersToWidget(
+    double height,
+  ) {
+    return Image.asset(
+      startersPath(),
+      height: height,
+    );
+  }
+
+  Widget meatToWidget(double height) {
+    return Image.asset(
+      meatPath(),
+      height: height,
+    );
+  }
+
+  Widget starchesToWidget(double height) {
+    return Image.asset(
+      starchesPath(),
+      height: height,
     );
   }
 }

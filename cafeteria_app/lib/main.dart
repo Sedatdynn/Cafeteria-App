@@ -1,10 +1,7 @@
 import 'dart:io';
-
-import 'package:cafeteria_app/core/theme/color/colors.dart';
-import 'package:cafeteria_app/views/home/cubit/home_cubit.dart';
-import 'package:cafeteria_app/views/home/view/home_view.dart';
-import 'package:cafeteria_app/views/home/service/items_service.dart';
-import 'package:cafeteria_app/views/home/service/network_manager.dart';
+import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
+import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
+import 'package:cafeteria_app/views/home/home_shelf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
         },
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter ',
+          title: MainTexts.appTitle,
           theme: ThemeData(
             primarySwatch: AppColors.primarySwatch,
           ),

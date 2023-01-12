@@ -175,7 +175,7 @@ class MyHttpOverrides extends HttpOverrides {
  <img src="https://i.ibb.co/h1bKSrP/Screenshot-5.png" width="180" height="380" />
  
  <br /> 
-## Conclusion
+ ## Conclusion
 
 I will be happy to answer any questions that you may have on this approach, and if you want to lend a hand with the boilerplate then please feel free to submit an issue and/or pull request 🙂
  

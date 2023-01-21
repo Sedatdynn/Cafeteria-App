@@ -22,9 +22,11 @@ class HomeCubit extends Cubit<HomeState> {
     try {
       emit(HomeLoading());
       final list = await generalService.fetchProductItems(index);
+      print(list.toString() + "************");
       allProduct = list;
       emit(HomeLoaded(allProduct, index));
     } catch (e) {
+      print(e);
       emit(HomeError(e.toString()));
     }
   }

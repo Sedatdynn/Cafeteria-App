@@ -1,26 +1,23 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part "items_model.g.dart";
+
+@JsonSerializable()
 class ItemsModel {
   List<Days>? days;
 
   ItemsModel({this.days});
 
-  ItemsModel.fromJson(Map<String, dynamic> json) {
-    if (json['days'] != null) {
-      days = <Days>[];
-      json['days'].forEach((v) {
-        days!.add(Days.fromJson(v));
-      });
-    }
+  factory ItemsModel.fromJson(Map<String, dynamic> json) {
+    return _$ItemsModelFromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    if (days != null) {
-      data['days'] = days!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return _$ItemsModelToJson(this);
   }
 }
 
+@JsonSerializable()
 class Days {
   int? id;
   String? day;
@@ -28,54 +25,32 @@ class Days {
 
   Days({this.id, this.day, this.contents});
 
-  Days.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    day = json['day'];
-    if (json['contents'] != null) {
-      contents = <Contents>[];
-      json['contents'].forEach((v) {
-        contents!.add(Contents.fromJson(v));
-      });
-    }
+  factory Days.fromJson(Map<String, dynamic> json) {
+    return _$DaysFromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['day'] = day;
-    if (contents != null) {
-      data['contents'] = contents!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return _$DaysToJson(this);
   }
 }
 
+@JsonSerializable()
 class Contents {
   String? name;
   List<Foods>? foods;
 
   Contents({this.name, this.foods});
 
-  Contents.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    if (json['foods'] != null) {
-      foods = <Foods>[];
-      json['foods'].forEach((v) {
-        foods!.add(Foods.fromJson(v));
-      });
-    }
+  factory Contents.fromJson(Map<String, dynamic> json) {
+    return _$ContentsFromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['name'] = name;
-    if (foods != null) {
-      data['foods'] = foods!.map((v) => v.toJson()).toList();
-    }
-    return data;
+    return _$ContentsToJson(this);
   }
 }
 
+@JsonSerializable()
 class Foods {
   int? fiyat;
   String? fname;
@@ -83,17 +58,11 @@ class Foods {
 
   Foods({this.fiyat, this.fname, this.isSelected});
 
-  Foods.fromJson(Map<String, dynamic> json) {
-    fiyat = json['fiyat'];
-    fname = json['fname'];
-    isSelected = json['isSelected'];
+  factory Foods.fromJson(Map<String, dynamic> json) {
+    return _$FoodsFromJson(json);
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['fiyat'] = fiyat;
-    data['fname'] = fname;
-    data['isSelected'] = isSelected;
-    return data;
+    return _$FoodsToJson(this);
   }
 }

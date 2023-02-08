@@ -1,7 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cafeteria_app/core/const/responsive/responsive.dart';
 import 'package:cafeteria_app/core/theme/color/colors.dart';
 import 'package:cafeteria_app/product/constant/texts/app_texts.dart';
-import 'package:cafeteria_app/views/home/view/home_view.dart';
 import 'package:flutter/material.dart';
 
 class NavigationDrawer extends StatelessWidget {
@@ -58,11 +58,8 @@ class NavigationDrawer extends StatelessWidget {
 void selectedItem(BuildContext context, int index) {
   switch (index) {
     case 0:
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomeView(),
-          ));
+      context.router.popUntilRouteWithName('HomeRoute');
+
       break;
     default:
   }

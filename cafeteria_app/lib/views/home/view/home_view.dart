@@ -1,12 +1,13 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:cafeteria_app/core/const/border_responsive_shelf.dart';
 import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
 import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
+import 'package:cafeteria_app/product/navigator/app_router.dart';
 import 'package:cafeteria_app/views/home/home_shelf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../order/order_page.dart';
 import '../../drawer/drawer.dart';
 
 class HomeView extends StatefulWidget {
@@ -142,16 +143,15 @@ class _HomeViewState extends State<HomeView> {
   }
 
   InkWell buildPaymentButton(BuildContext context) {
+    int totalMoney = context.watch<HomeCubit>().totalPay;
+    List selectedFood = context.watch<HomeCubit>().isSelectFood;
+    List eachFoodPrice = context.watch<HomeCubit>().eachFoodPrice;
     return InkWell(
       onTap: () => context.read<HomeCubit>().totalPay > 0
-          ? Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => OrderView(
-                    totalMoney: context.watch<HomeCubit>().totalPay,
-                    isSelectedFood: context.watch<HomeCubit>().isSelectFood,
-                    eachFoodPrice: context.watch<HomeCubit>().eachFoodPrice),
-              ))
+          ? context.router.navigate(OrderRoute(
+              totalMoney: totalMoney,
+              isSelectedFood: selectedFood,
+              eachFoodPrice: eachFoodPrice))
           : null,
       child: Container(
         padding: context.minAllPadding,

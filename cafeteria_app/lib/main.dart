@@ -4,15 +4,17 @@ import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
 import 'package:cafeteria_app/views/home/home_shelf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'product/navigator/app_router.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final _appRouter = AppRouter();
+  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,13 +24,14 @@ class MyApp extends StatelessWidget {
               GeneralService(ProjectNetworkManager.instance.service, "EL0E"))
             ..fetchAllProduct();
         },
-        child: MaterialApp(
+        child: MaterialApp.router(
+          routerDelegate: _appRouter.delegate(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
           debugShowCheckedModeBanner: false,
           title: MainTexts.appTitle,
           theme: ThemeData(
             primarySwatch: AppColors.primarySwatch,
           ),
-          home: const HomeView(),
         ));
   }
 }

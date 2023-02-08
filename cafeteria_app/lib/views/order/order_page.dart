@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:auto_route/auto_route.dart';
+import 'package:cafeteria_app/product/navigator/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cafeteria_app/views/payment/payment.dart';
@@ -151,12 +153,9 @@ class _OrderViewState extends State<OrderView> {
       width: context.dynamicWidth(0.4),
       child: ElevatedButton.icon(
         onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    PaymentPageView(totalFee: widget.totalMoney),
-              ));
+          context.router
+              .navigate(PaymentPageRoute(totalFee: widget.totalMoney));
+          // PaymentPageView(totalFee: widget.totalMoney),
         },
         icon: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -192,10 +191,7 @@ class _OrderViewState extends State<OrderView> {
           context.read<HomeCubit>().isSelectFood.clear();
           context.read<HomeCubit>().eachFoodPrice.clear();
           context.read<HomeCubit>().totalPay = 0;
-          Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeView()),
-              (route) => false);
+          context.router.pushNamed("/home");
         }
       }
     } else {

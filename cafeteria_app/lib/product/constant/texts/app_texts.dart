@@ -44,3 +44,7 @@ mixin PaymentTexts {
   static const String mmyyText = "MM/YY'";
   static const String cvcText = "CVC";
 }
+
+mixin ErrorTexts {
+  static const String wrongText = "Something went wrong!";
+}

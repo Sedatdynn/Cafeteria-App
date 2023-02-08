@@ -3,7 +3,6 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cafeteria_app/product/navigator/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cafeteria_app/views/payment/payment.dart';
 import '../../core/theme/theme_color_shelf.dart';
 import '../../product/constant/product_const_shelf.dart';
 import '../home/home_shelf.dart';
@@ -106,7 +105,7 @@ class _OrderViewState extends State<OrderView> {
       height: context.dynamicHeight(0.15),
       width: context.width,
       decoration: const BoxDecoration(
-          color: AppColors.lightIndigo, borderRadius: BorderRadi.LowCircular),
+          color: AppColors.lightIndigo, borderRadius: BorderRadi.lowCircular),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -155,7 +154,6 @@ class _OrderViewState extends State<OrderView> {
         onPressed: () {
           context.router
               .navigate(PaymentPageRoute(totalFee: widget.totalMoney));
-          // PaymentPageView(totalFee: widget.totalMoney),
         },
         icon: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -167,12 +165,13 @@ class _OrderViewState extends State<OrderView> {
   }
 
   checkEmployee() async {
+    HomeCubit cubit = context.read<HomeCubit>();
+    final clearSelectedFood = cubit.isSelectFood.clear();
+    final clearEachFoodPrice = cubit.eachFoodPrice.clear();
     final random = Random();
     var values = allEmployees.keys.toList();
     String element = values[random.nextInt(values.length)];
     int freeFoodCount = allEmployees[element] ?? 0;
-    print(element);
-    print(freeFoodCount);
     if (freeFoodCount > 0) {
       if (widget.isSelectedFood.length <= 3) {
         if (widget.isSelectedFood.contains(CheckFoodText.danaEti) &&
@@ -182,15 +181,12 @@ class _OrderViewState extends State<OrderView> {
             widget.isSelectedFood.contains(CheckFoodText.pilav)) {
           await warningToast(context, CheckFoodText.hatalimakarna);
         } else if (freeFoodCount >= 0) {
-          await warningToast(
-              context,
-              element +
-                  CheckFoodText.basariliOdeme +
-                  "Kalan hak: ${freeFoodCount - 1}");
+          await warningToast(context,
+              "$element${CheckFoodText.basariliOdeme} Kalan hak: ${freeFoodCount - 1}");
           Future.delayed(CustomDuration.lowDuration);
-          context.read<HomeCubit>().isSelectFood.clear();
-          context.read<HomeCubit>().eachFoodPrice.clear();
-          context.read<HomeCubit>().totalPay = 0;
+          clearSelectedFood;
+          clearEachFoodPrice;
+          cubit.totalPay = 0;
           context.router.pushNamed("/home");
         }
       }
@@ -202,7 +198,7 @@ class _OrderViewState extends State<OrderView> {
 
 enum ImagePaths { gunsel, card }
 
-extension ImagePathExtesion on ImagePaths {
+extension ImagePathExtension on ImagePaths {
   String gunselPath() {
     return "assets/button/${ImagePaths.gunsel.name}.png";
   }

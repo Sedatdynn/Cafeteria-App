@@ -26,7 +26,7 @@ class GeneralService extends IGeneralService {
     if (response.statusCode == HttpStatus.ok) {
       final jsonBody = response.data;
       if (jsonBody is Map<String, dynamic>) {
-        final modeldata = ItemsModel.fromJson(jsonBody);
+        final modelData = ItemsModel.fromJson(jsonBody);
         final DateTime now = DateTime.now();
         String today = DateFormat('EEEEE', 'en_US').format(now);
         final List days = [
@@ -37,10 +37,8 @@ class GeneralService extends IGeneralService {
           "friday"
         ];
 
-        int day_index = days.indexOf(today.toLowerCase());
-        final dynamic_contents = modeldata.days![day_index].contents![2].foods;
-        final dynamic_day = modeldata.days![day_index].day;
-        return modeldata.days![day_index].contents![index].foods;
+        int dayIndex = days.indexOf(today.toLowerCase());
+        return modelData.days![dayIndex].contents![index].foods;
       }
     }
     throw 'Something went wrong';

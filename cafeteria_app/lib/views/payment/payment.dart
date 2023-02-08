@@ -19,7 +19,7 @@ class PaymentPageView extends StatefulWidget {
 
 class _PaymentPageViewState extends State<PaymentPageView> {
   TextEditingController cardController = TextEditingController();
-  TextEditingController cvcContoller = TextEditingController();
+  TextEditingController cvcController = TextEditingController();
   TextEditingController dateController = TextEditingController();
 
   @override
@@ -123,7 +123,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
       inputFormatters: [
         FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
       ],
-      controller: cvcContoller,
+      controller: cvcController,
       decoration: const InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadi.midCircular,
@@ -141,7 +141,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
           context.read<HomeCubit>().isSelectFood.clear();
           context.read<HomeCubit>().eachFoodPrice.clear();
           context.read<HomeCubit>().totalPay = 0;
-          context.router.popUntilRouteWithName('HomeRoute');
+          context.router.pushNamed('/home');
         },
         child: Container(
           padding: context.minAllPadding,

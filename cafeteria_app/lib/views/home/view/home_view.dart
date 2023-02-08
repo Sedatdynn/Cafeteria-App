@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../core/widget/loading/widget_loading.dart';
+import '../../../core/widget/noData/widget_no_data.dart';
 import '../../drawer/drawer.dart';
 
 class HomeView extends StatefulWidget {
@@ -28,13 +30,11 @@ class _HomeViewState extends State<HomeView> {
         body: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading || state is HomeInitial) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const LoadingView();
             } else if (state is HomeLoaded) {
               return buildMainBody(context);
             }
-            return const Text("data");
+            return const NoDataView();
           },
         ),
       ),
@@ -130,12 +130,12 @@ class _HomeViewState extends State<HomeView> {
   Container buildPriceButton(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-          color: AppColors.mainPrimary, borderRadius: BorderRadi.LowCircular),
+          color: AppColors.mainPrimary, borderRadius: BorderRadi.lowCircular),
       width: 100,
       height: 60,
       child: Center(
         child: Text(
-          "${context.watch<HomeCubit>().totalPay} tl",
+          "${context.read<HomeCubit>().totalPay} tl",
           style: Theme.of(context).textTheme.headline5,
         ),
       ),
@@ -156,7 +156,7 @@ class _HomeViewState extends State<HomeView> {
       child: Container(
         padding: context.minAllPadding,
         decoration: const BoxDecoration(
-            color: AppColors.mainPrimary, borderRadius: BorderRadi.LowCircular),
+            color: AppColors.mainPrimary, borderRadius: BorderRadi.lowCircular),
         height: 60,
         child: Center(
           child: Text(
@@ -184,7 +184,7 @@ class _HomeViewState extends State<HomeView> {
         return Container(
           decoration: const BoxDecoration(
             color: AppColors.error,
-            borderRadius: BorderRadi.LowCircular,
+            borderRadius: BorderRadi.lowCircular,
           ),
           child: InkWell(
             onTap: () async {
@@ -199,7 +199,6 @@ class _HomeViewState extends State<HomeView> {
                       ? AppColors.lightIndigo
                       : AppColors.white,
                   borderRadius: BorderRadi.midCircular),
-              // width: width * 0.25,
               child: Column(
                 children: [
                   ClipRRect(
@@ -319,7 +318,7 @@ class _HomeViewState extends State<HomeView> {
 
 enum ImagePaths { starters, meat, starches }
 
-extension ImagePathExtesion on ImagePaths {
+extension ImagePathExtension on ImagePaths {
   String startersPath() {
     return "assets/category/${ImagePaths.starters.name}.jpg";
   }

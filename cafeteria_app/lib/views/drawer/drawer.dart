@@ -1,13 +1,13 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/core/const/responsive/responsive.dart';
+import 'package:cafeteria_app/product/constant/responsive/responsive.dart';
 import 'package:cafeteria_app/core/theme/color/colors.dart';
 import 'package:cafeteria_app/product/constant/texts/app_texts.dart';
 import 'package:flutter/material.dart';
 
-class NavigationDrawer extends StatelessWidget {
+class NavigationDrawerMenu extends StatelessWidget {
   final EdgeInsets padding = const EdgeInsets.symmetric(horizontal: 20);
 
-  const NavigationDrawer({
+  const NavigationDrawerMenu({
     Key? key,
   }) : super(key: key);
 

@@ -1,15 +1,19 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/core/const/border_responsive_shelf.dart';
 import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
 import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
+import 'package:cafeteria_app/product/extension/images/jpg_extension.dart';
 import 'package:cafeteria_app/product/navigator/app_router.dart';
+import 'package:cafeteria_app/product/widget/appBar/custom_appBar.dart';
+import 'package:cafeteria_app/product/widget/button/active_button.dart';
+import 'package:cafeteria_app/product/widget/textformField/sized_box.dart';
 import 'package:cafeteria_app/views/home/home_shelf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../core/widget/loading/widget_loading.dart';
-import '../../../core/widget/noData/widget_no_data.dart';
+import '../../../product/enums/imageEnum/image_enums.dart';
+import '../../../product/widget/loading/widget_loading.dart';
+import '../../../product/widget/noData/widget_no_data.dart';
 import '../../drawer/drawer.dart';
 
 class HomeView extends StatefulWidget {
@@ -24,8 +28,12 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: buildCustomAppBar(),
-        drawer: const NavigationDrawer(),
+        appBar: CustomAppBar(
+          isBack: false,
+          context: context,
+          title: MainTexts.appTitle,
+        ),
+        drawer: const NavigationDrawerMenu(),
         backgroundColor: AppColors.lightGrey,
         body: BlocBuilder<HomeCubit, HomeState>(
           builder: (context, state) {
@@ -41,35 +49,22 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  AppBar buildCustomAppBar() {
-    return AppBar(
-      centerTitle: true,
-      title: const Text(
-        MainTexts.appTitle,
-      ),
-    );
-  }
-
   SingleChildScrollView buildMainBody(BuildContext context) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: context.midAllPadding,
         child: Column(
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                buildSearchTextField(context),
+                buildDayField(context),
                 buildMainTextTitle(),
               ],
             ),
-            SizedBox(
-              height: context.dynamicHeight(0.02),
-            ),
+            ConstSpace(height: context.dynamicHeight(0.02)),
             buildTopLunchItems(context),
-            SizedBox(
-              height: context.dynamicHeight(0.03),
-            ),
+            ConstSpace(height: context.dynamicHeight(0.03)),
             SizedBox(
               height: context.dynamicHeight(0.5),
               child: buildFoodsBody(
@@ -80,7 +75,10 @@ class _HomeViewState extends State<HomeView> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                buildPriceButton(context),
+                ActiveButton(
+                  label: "${context.read<HomeCubit>().totalPay} tl",
+                  onPressed: () {},
+                ),
                 buildPaymentButton(context),
               ],
             )
@@ -100,7 +98,7 @@ class _HomeViewState extends State<HomeView> {
           },
           child: buildCategoryCard(
               context.width,
-              ImagePaths.starters.startersToWidget(context.dynamicHeight(0.1)),
+              ImagePaths.starters.toImage(context),
               HomeTexts.startersText,
               context),
         ),
@@ -110,7 +108,9 @@ class _HomeViewState extends State<HomeView> {
           },
           child: buildCategoryCard(
               context.width,
-              ImagePaths.starches.starchesToWidget(context.dynamicHeight(0.1)),
+              ImagePaths.starches.toImage(
+                context,
+              ),
               HomeTexts.starchesText,
               context),
         ),
@@ -118,54 +118,58 @@ class _HomeViewState extends State<HomeView> {
             onTap: () {
               context.read<HomeCubit>().changeIndex(2);
             },
-            child: buildCategoryCard(
-                context.width,
-                ImagePaths.meat.meatToWidget(context.dynamicHeight(0.1)),
-                HomeTexts.meatText,
-                context)),
+            child: buildCategoryCard(context.width,
+                ImagePaths.meat.toImage(context), HomeTexts.meatText, context)),
       ],
     );
   }
 
-  Container buildPriceButton(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-          color: AppColors.mainPrimary, borderRadius: BorderRadi.lowCircular),
-      width: 100,
-      height: 60,
-      child: Center(
-        child: Text(
-          "${context.read<HomeCubit>().totalPay} tl",
-          style: Theme.of(context).textTheme.headline5,
-        ),
-      ),
-    );
-  }
+//TODO  create custom button
+  // Container buildPriceButton(BuildContext context) {
+  //   return Container(
+  //
+  //     width: context.dynamicWidth(0.4),
+  //     height: context.dynamicHeight(0.08),
+  //     child: Center(
+  //       child: Text(
+  //       ,
+  //         style: Theme.of(context).textTheme.headlineMedium,
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  InkWell buildPaymentButton(BuildContext context) {
+  buildPaymentButton(BuildContext context) {
     int totalMoney = context.watch<HomeCubit>().totalPay;
     List selectedFood = context.watch<HomeCubit>().isSelectFood;
     List eachFoodPrice = context.watch<HomeCubit>().eachFoodPrice;
-    return InkWell(
-      onTap: () => context.read<HomeCubit>().totalPay > 0
-          ? context.router.navigate(OrderRoute(
-              totalMoney: totalMoney,
-              isSelectedFood: selectedFood,
-              eachFoodPrice: eachFoodPrice))
-          : null,
-      child: Container(
-        padding: context.minAllPadding,
-        decoration: const BoxDecoration(
-            color: AppColors.mainPrimary, borderRadius: BorderRadi.lowCircular),
-        height: 60,
-        child: Center(
-          child: Text(
-            HomeTexts.paymentText,
-            style: Theme.of(context).textTheme.headline5,
-          ),
-        ),
-      ),
+    return ActiveButton(
+      label: HomeTexts.paymentText,
+      onPressed: () {
+        context.read<HomeCubit>().totalPay > 0
+            ? context.router.navigate(OrderRoute(
+                totalMoney: totalMoney,
+                isSelectedFood: selectedFood,
+                eachFoodPrice: eachFoodPrice))
+            : null;
+      },
     );
+    // return InkWell(
+    // onTap: () =>
+    // child: Container(
+    //   padding: context.minAllPadding,
+    //   decoration: const BoxDecoration(
+    //       color: AppColors.mainPrimary, borderRadius: BorderRadi.lowCircular),
+    //   width: context.dynamicWidth(0.4),
+    //   height: context.dynamicHeight(0.08),
+    //   child: Center(
+    //     child: Text(
+    //       HomeTexts.paymentText,
+    //       style: Theme.of(context).textTheme.headlineMedium,
+    //     ),
+    //   ),
+    // ),
+    //);
   }
 
   GridView buildFoodsBody(
@@ -279,7 +283,7 @@ class _HomeViewState extends State<HomeView> {
       padding: const EdgeInsets.all(8),
       decoration: const BoxDecoration(
           color: AppColors.white, borderRadius: BorderRadi.midCircular),
-      width: width * 0.28,
+      width: context.dynamicWidth(0.28),
       child: Column(
         children: [
           ClipRRect(
@@ -288,19 +292,20 @@ class _HomeViewState extends State<HomeView> {
           ),
           Text(
             data,
-            style: Theme.of(context).textTheme.subtitle1,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
       ),
     );
   }
 
-  Widget buildSearchTextField(BuildContext context) {
+//TODO custom title field
+  Widget buildDayField(BuildContext context) {
     return Text(
       checkDay(),
       style: Theme.of(context)
           .textTheme
-          .headline5
+          .headlineSmall
           ?.copyWith(fontWeight: FontWeight.bold),
     );
   }
@@ -310,47 +315,8 @@ class _HomeViewState extends State<HomeView> {
       HomeTexts.homeMenuText,
       style: Theme.of(context)
           .textTheme
-          .headline5
+          .headlineSmall
           ?.copyWith(fontWeight: FontWeight.bold),
-    );
-  }
-}
-
-enum ImagePaths { starters, meat, starches }
-
-extension ImagePathExtension on ImagePaths {
-  String startersPath() {
-    return "assets/category/${ImagePaths.starters.name}.jpg";
-  }
-
-  String meatPath() {
-    return "assets/category/${ImagePaths.meat.name}.jpg";
-  }
-
-  String starchesPath() {
-    return "assets/category/${ImagePaths.meat.name}.jpg";
-  }
-
-  Widget startersToWidget(
-    double height,
-  ) {
-    return Image.asset(
-      startersPath(),
-      height: height,
-    );
-  }
-
-  Widget meatToWidget(double height) {
-    return Image.asset(
-      meatPath(),
-      height: height,
-    );
-  }
-
-  Widget starchesToWidget(double height) {
-    return Image.asset(
-      starchesPath(),
-      height: height,
     );
   }
 }

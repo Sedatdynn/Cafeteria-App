@@ -43,6 +43,8 @@ mixin PaymentTexts {
   static const String cardInfo = "Card information";
   static const String mmyyText = "MM/YY'";
   static const String cvcText = "CVC";
+  static const String dateText = "Expiration Date";
+  static const String securityCode = "Security Code";
 }
 
 mixin ErrorTexts {

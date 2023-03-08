@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cafeteria_app/product/widget/appBar/custom_appBar.dart';
+import 'package:cafeteria_app/product/widget/button/active_button.dart';
+import '../../product/widget/textformField/textform_field.dart';
+import '../../product/widget/textformField/textform_title.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:cafeteria_app/core/const/border_responsive_shelf.dart';
-import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
+import '../../core/theme/theme_color_shelf.dart';
 import '../../product/constant/product_const_shelf.dart';
+import '../../product/widget/textformField/sized_box.dart';
 import '../home/home_shelf.dart';
 
 class PaymentPageView extends StatefulWidget {
@@ -25,15 +28,11 @@ class _PaymentPageViewState extends State<PaymentPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildCustomAppBar(),
+      appBar: CustomAppBar(
+        context: context,
+        title: MainTexts.appTitle,
+      ),
       body: buildMainBody(context),
-    );
-  }
-
-  AppBar buildCustomAppBar() {
-    return AppBar(
-      backgroundColor: AppColors.mainPrimary,
-      title: const Text(MainTexts.appTitle),
     );
   }
 
@@ -47,25 +46,23 @@ class _PaymentPageViewState extends State<PaymentPageView> {
             Center(
               child: buildTitleText(context),
             ),
-            SizedBox(
-              height: context.dynamicHeight(0.1),
-            ),
-            buildCardInfoText(context),
-            SizedBox(
-              height: context.dynamicHeight(0.01),
-            ),
+            ConstSpace(height: context.dynamicHeight(0.1)),
+            const TextFormTitle(PaymentTexts.cardNumber),
+            const ConstSpace(),
             buildCardNumberTextformField(),
             SizedBox(
               height: context.dynamicHeight(0.03),
             ),
+            const TextFormTitle(PaymentTexts.dateText),
+            const ConstSpace(),
             buildDateTextformField(),
             SizedBox(
               height: context.dynamicHeight(0.03),
             ),
+            const TextFormTitle(PaymentTexts.securityCode),
+            const ConstSpace(),
             buildCvcTextformField(),
-            SizedBox(
-              height: context.dynamicHeight(0.03),
-            ),
+            const ConstSpace(),
             buildButton(context)
           ],
         ),
@@ -76,66 +73,47 @@ class _PaymentPageViewState extends State<PaymentPageView> {
   Text buildTitleText(BuildContext context) {
     return Text(
       " Total Price:  ${widget.totalFee.toString()} tl  ",
-      style: Theme.of(context).textTheme.headline4,
+      style: Theme.of(context).textTheme.headlineMedium,
     );
   }
 
-  Text buildCardInfoText(BuildContext context) {
-    return Text(
-      PaymentTexts.cardInfo,
-      style: Theme.of(context).textTheme.bodyLarge,
-    );
+  buildCardNumberTextformField() {
+    return PaymentTextField(
+        controller: cardController,
+        validator: (p0) {},
+        maxLength: 16,
+        keyboardType: TextInputType.number,
+        mainIcon: Icons.credit_card_outlined,
+        labelText: PaymentTexts.cardNumber);
   }
 
-  TextFormField buildCardNumberTextformField() {
-    return TextFormField(
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      ],
-      maxLength: 16,
-      controller: cardController,
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadi.midCircular,
-          ),
-          labelText: PaymentTexts.cardNumber),
-    );
-  }
-
-  TextFormField buildDateTextformField() {
-    return TextFormField(
+  buildDateTextformField() {
+    return PaymentTextField(
+      controller: dateController,
+      validator: (p0) {},
       maxLength: 5,
       keyboardType: TextInputType.datetime,
-      controller: dateController,
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadi.midCircular,
-          ),
-          labelText: PaymentTexts.mmyyText),
+      labelText: PaymentTexts.mmyyText,
+      mainIcon: Icons.date_range,
     );
   }
 
-  TextFormField buildCvcTextformField() {
-    return TextFormField(
-      maxLength: 3,
-      keyboardType: TextInputType.number,
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-      ],
-      controller: cvcController,
-      decoration: const InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadi.midCircular,
-          ),
-          labelText: PaymentTexts.cvcText),
-    );
+  buildCvcTextformField() {
+    return PaymentTextField(
+        controller: cvcController,
+        validator: (p0) {},
+        maxLength: 3,
+        keyboardType: TextInputType.number,
+        mainIcon: Icons.security_outlined,
+        labelText: PaymentTexts.cvcText);
   }
 
-  Center buildButton(BuildContext context) {
+  buildButton(BuildContext context) {
     return Center(
-      child: InkWell(
-        onTap: () {
+      child: ActiveButton(
+        width: context.dynamicWidth(0.7),
+        label: PaymentTexts.payComplete,
+        onPressed: () {
           warningToast(context, PaymentTexts.paySuccess);
           Future.delayed(CustomDuration.lowDuration);
           context.read<HomeCubit>().isSelectFood.clear();
@@ -143,21 +121,6 @@ class _PaymentPageViewState extends State<PaymentPageView> {
           context.read<HomeCubit>().totalPay = 0;
           context.router.pushNamed('/home');
         },
-        child: Container(
-          padding: context.minAllPadding,
-          decoration: const BoxDecoration(
-              color: AppColors.mainPrimary,
-              borderRadius: BorderRadi.midCircular),
-          height: context.dynamicHeight(0.08),
-          width: context.dynamicWidth(0.6),
-          child: Center(
-            child: Text(
-              PaymentTexts.payComplete,
-              style: Theme.of(context).textTheme.subtitle1?.copyWith(
-                  color: AppColors.black, fontWeight: FontWeight.bold),
-            ),
-          ),
-        ),
       ),
     );
   }

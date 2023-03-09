@@ -16,6 +16,7 @@ mixin HomeTexts {
   static const String startersText = 'Starters';
   static const String starchesText = 'Starches';
   static const String paymentText = "Payment";
+  static const String ok = 'Ok';
 }
 
 mixin CheckFoodText {

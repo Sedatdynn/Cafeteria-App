@@ -29,25 +29,24 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  bloc: ^8.1.0
-  cupertino_icons: ^1.0.2
-  json_annotation: ^4.7.0
-  json_serializable: ^6.5.4
-  flutter_bloc: ^8.1.1
-  intl: ^0.17.0
-  shared_preferences: ^2.0.15
-  fluttertoast: ^8.1.2
   auto_route: ^5.0.4
+  bloc: ^8.1.0
+  connectivity_plus: ^3.0.3
+  cupertino_icons: ^1.0.2
   dio: ^4.0.6
-  
   flutter:
     sdk: flutter
- 
+  flutter_bloc: ^8.1.1
+  fluttertoast: ^8.1.2
+  intl: ^0.17.0
+  json_annotation: ^4.7.0
+  json_serializable: ^6.5.4
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
-  flutter_lints: ^2.0.0
   auto_route_generator: ^5.0.3
   build_runner: ^2.3.3
+  flutter_lints: ^2.0.0
   flutter_test:
     sdk: flutter
 
@@ -66,9 +65,6 @@ flutter:
     - assets/meals/
     - assets/button/
     - assets/error/
-
-
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
 import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
+import 'package:cafeteria_app/views/home/cubit/internetCubit/internet_cubit.dart';
 import 'package:cafeteria_app/views/home/home_shelf.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,12 +19,21 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (context) {
-          return HomeCubit(
-              GeneralService(ProjectNetworkManager.instance.service, "EL0E"))
-            ..fetchAllProduct();
-        },
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) {
+              return InternetCubit()..checkConnection();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return HomeCubit(GeneralService(
+                  ProjectNetworkManager.instance.service, "EL0E"))
+                ..fetchAllProduct();
+            },
+          ),
+        ],
         child: MaterialApp.router(
           routerDelegate: _appRouter.delegate(),
           routeInformationParser: _appRouter.defaultRouteParser(),
@@ -36,6 +46,7 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//TODO move this class to another page
 class MyHttpOverrides extends HttpOverrides {
   @override
   HttpClient createHttpClient(SecurityContext? context) {

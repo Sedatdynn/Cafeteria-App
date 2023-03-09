@@ -7,6 +7,7 @@ import 'package:cafeteria_app/product/widget/appBar/custom_appBar.dart';
 import 'package:cafeteria_app/product/widget/button/active_button.dart';
 import 'package:cafeteria_app/product/widget/textformField/sized_box.dart';
 import 'package:cafeteria_app/views/home/home_shelf.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -17,6 +18,7 @@ import '../../../product/widget/image/clip_rect_image.dart';
 import '../../../product/widget/loading/widget_loading.dart';
 import '../../../product/widget/noData/widget_no_data.dart';
 import '../../drawer/drawer.dart';
+import '../cubit/internetCubit/internet_cubit.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -37,16 +39,51 @@ class _HomeViewState extends State<HomeView> {
         ),
         drawer: const NavigationDrawerMenu(),
         backgroundColor: AppColors.lightGrey,
-        body: BlocBuilder<HomeCubit, HomeState>(
-          builder: (context, state) {
-            if (state is HomeLoading || state is HomeInitial) {
-              return const LoadingView();
-            } else if (state is HomeLoaded) {
-              return buildMainBody(context);
+        body: BlocListener<InternetCubit, InternetState>(
+          listener: (context, state) {
+            if (state is InternetConnected) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(buildConnectedSnackBar(state));
+            } else if (state is InternetNotConnected) {
+              buildNotConnectedDialog(context, state);
             }
-            return const NoDataView();
           },
+          child: BlocBuilder<HomeCubit, HomeState>(
+            builder: (context, state) {
+              if (state is HomeLoading || state is HomeInitial) {
+                return const LoadingView();
+              } else if (state is HomeLoaded) {
+                return buildMainBody(context);
+              }
+              return const NoDataView();
+            },
+          ),
         ),
+      ),
+    );
+  }
+
+  SnackBar buildConnectedSnackBar(InternetConnected state) =>
+      SnackBar(content: Text(state.message));
+
+  Future<dynamic> buildNotConnectedDialog(
+      BuildContext context, InternetNotConnected state) {
+    return showDialog(
+      context: context,
+      builder: (context) => CupertinoAlertDialog(
+        title: Text(state.message),
+        content: Image.asset(
+          AppConstantImage.instance.constImagePath,
+          height: context.dynamicHeight(0.1),
+        ),
+        actions: [
+          CupertinoDialogAction(
+              child: ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text(HomeTexts.ok)))
+        ],
       ),
     );
   }

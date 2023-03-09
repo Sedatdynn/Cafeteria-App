@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import '../model/items_model.dart';
-import '../service/items_service.dart';
+import '../../model/items_model.dart';
+import '../../service/items_service.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {

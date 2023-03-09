@@ -14,5 +14,6 @@ extension AllPaddings on BuildContext {
 }
 
 extension SymetricPadding on BuildContext {
-  EdgeInsets get minHorizontal => const EdgeInsets.symmetric(horizontal: 8);
+  EdgeInsets get minHorizontal => const EdgeInsets.symmetric(horizontal: 8.0);
+  EdgeInsets get minVertical => const EdgeInsets.symmetric(vertical: 8.0);
 }

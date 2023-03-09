@@ -1,7 +1,12 @@
 import 'dart:math';
 import 'package:auto_route/auto_route.dart';
+import 'package:cafeteria_app/product/constant/image/const_image.dart';
+import 'package:cafeteria_app/product/enums/imageEnum/image_enums.dart';
+import 'package:cafeteria_app/product/extension/images/png_extension.dart';
 import 'package:cafeteria_app/product/navigator/app_router.dart';
 import 'package:cafeteria_app/product/widget/appBar/custom_appBar.dart';
+import 'package:cafeteria_app/product/widget/button/card_button.dart';
+import 'package:cafeteria_app/product/widget/image/clip_rect_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/theme/theme_color_shelf.dart';
@@ -58,7 +63,7 @@ class _OrderViewState extends State<OrderView> {
 
   Padding buildBodyField(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
+      padding: context.minAllPadding,
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -83,9 +88,8 @@ class _OrderViewState extends State<OrderView> {
     );
   }
 
-  Container buildMainFoodField(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(2),
+  buildMainFoodField(BuildContext context) {
+    return SizedBox(
       height: context.dynamicHeight(0.8),
       width: context.width,
       child: ListView.builder(
@@ -98,15 +102,18 @@ class _OrderViewState extends State<OrderView> {
 
   Container buildFoodInfoField(BuildContext context, int index) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: context.dynamicHeight(0.005)),
+      padding: context.midAllPadding,
+      margin: context.minVertical,
       height: context.dynamicHeight(0.15),
       width: context.width,
       decoration: const BoxDecoration(
           color: AppColors.lightIndigo, borderRadius: BorderRadi.lowCircular),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildEachFoodImage(index, context),
+          ClipRectImage(
+              imagePath: widget.isSelectedFood[index] ??
+                  AppConstantImage.instance.constImagePath),
           Text(widget.isSelectedFood[index].toString()),
           Text("${widget.eachFoodPrice[index]} tl"),
         ],
@@ -114,51 +121,23 @@ class _OrderViewState extends State<OrderView> {
     );
   }
 
-  ClipRRect buildEachFoodImage(int index, BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadi.midCircular,
-      child: Image.asset(
-        "assets/meals/${widget.isSelectedFood[index].toString()}.png",
-        height: context.dynamicHeight(0.1),
-        width: context.dynamicWidth(0.3),
-      ),
-    );
-  }
-
-  SizedBox buildGunselButton(BuildContext context) {
-    return SizedBox(
-      height: context.dynamicHeight(0.05),
-      width: context.dynamicWidth(0.4),
-      child: ElevatedButton.icon(
+  buildGunselButton(BuildContext context) {
+    return CardButton(
+        text: OrderTexts.gunselButtonText,
         onPressed: () {
           widget.isSelectedFood.length <= 3
               ? checkEmployee()
               : warningToast(context, CheckFoodText.totalFoodControl);
         },
-        icon: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ImagePaths.gunsel.cardToWidget()),
-        label: const Text(OrderTexts.gunselButtonText),
-      ),
-    );
+        icon: ImagePaths.gunsel.toPngImage(context));
   }
 
-  SizedBox buildCreditCardButton(BuildContext context) {
-    return SizedBox(
-      height: context.dynamicHeight(0.05),
-      width: context.dynamicWidth(0.4),
-      child: ElevatedButton.icon(
-        onPressed: () {
-          context.router
-              .navigate(PaymentPageRoute(totalFee: widget.totalMoney));
-        },
-        icon: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ImagePaths.card.cardToWidget(),
-        ),
-        label: const Text(OrderTexts.creditButtonText),
-      ),
-    );
+  buildCreditCardButton(BuildContext context) {
+    return CardButton(
+        text: OrderTexts.creditButtonText,
+        onPressed: () => context.router
+            .navigate(PaymentPageRoute(totalFee: widget.totalMoney)),
+        icon: ImagePaths.card.toPngImage(context));
   }
 
   checkEmployee() async {
@@ -190,25 +169,5 @@ class _OrderViewState extends State<OrderView> {
     } else {
       await warningToast(context, element + CheckFoodText.gecersiz);
     }
-  }
-}
-
-enum ImagePaths { gunsel, card }
-
-extension ImagePathExtension on ImagePaths {
-  String gunselPath() {
-    return "assets/button/${ImagePaths.gunsel.name}.png";
-  }
-
-  String cardPath() {
-    return "assets/button/${ImagePaths.card.name}.png";
-  }
-
-  Widget gunselToWidget() {
-    return Image.asset(gunselPath(), height: 30);
-  }
-
-  Widget cardToWidget() {
-    return Image.asset(cardPath(), height: 30);
   }
 }

@@ -11,7 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../product/constant/image/const_image.dart';
 import '../../../product/enums/imageEnum/image_enums.dart';
+import '../../../product/widget/image/clip_rect_image.dart';
 import '../../../product/widget/loading/widget_loading.dart';
 import '../../../product/widget/noData/widget_no_data.dart';
 import '../../drawer/drawer.dart';
@@ -98,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
           },
           child: buildCategoryCard(
               context.width,
-              ImagePaths.starters.toImage(context),
+              ImagePaths.starters.toJpgImage(context),
               HomeTexts.startersText,
               context),
         ),
@@ -108,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
           },
           child: buildCategoryCard(
               context.width,
-              ImagePaths.starches.toImage(
+              ImagePaths.starches.toJpgImage(
                 context,
               ),
               HomeTexts.starchesText,
@@ -118,26 +120,14 @@ class _HomeViewState extends State<HomeView> {
             onTap: () {
               context.read<HomeCubit>().changeIndex(2);
             },
-            child: buildCategoryCard(context.width,
-                ImagePaths.meat.toImage(context), HomeTexts.meatText, context)),
+            child: buildCategoryCard(
+                context.width,
+                ImagePaths.meat.toJpgImage(context),
+                HomeTexts.meatText,
+                context)),
       ],
     );
   }
-
-//TODO  create custom button
-  // Container buildPriceButton(BuildContext context) {
-  //   return Container(
-  //
-  //     width: context.dynamicWidth(0.4),
-  //     height: context.dynamicHeight(0.08),
-  //     child: Center(
-  //       child: Text(
-  //       ,
-  //         style: Theme.of(context).textTheme.headlineMedium,
-  //       ),
-  //     ),
-  //   );
-  // }
 
   buildPaymentButton(BuildContext context) {
     int totalMoney = context.watch<HomeCubit>().totalPay;
@@ -154,22 +144,6 @@ class _HomeViewState extends State<HomeView> {
             : null;
       },
     );
-    // return InkWell(
-    // onTap: () =>
-    // child: Container(
-    //   padding: context.minAllPadding,
-    //   decoration: const BoxDecoration(
-    //       color: AppColors.mainPrimary, borderRadius: BorderRadi.lowCircular),
-    //   width: context.dynamicWidth(0.4),
-    //   height: context.dynamicHeight(0.08),
-    //   child: Center(
-    //     child: Text(
-    //       HomeTexts.paymentText,
-    //       style: Theme.of(context).textTheme.headlineMedium,
-    //     ),
-    //   ),
-    // ),
-    //);
   }
 
   GridView buildFoodsBody(
@@ -205,13 +179,9 @@ class _HomeViewState extends State<HomeView> {
                   borderRadius: BorderRadi.midCircular),
               child: Column(
                 children: [
-                  ClipRRect(
-                    borderRadius: BorderRadi.midCircular,
-                    child: Image.asset(
-                      "assets/meals/${items[index]!.fname}.png",
-                      height: context.dynamicHeight(0.1),
-                      width: context.dynamicWidth(0.3),
-                    ),
+                  ClipRectImage(
+                    imagePath: items[index]!.fname ??
+                        AppConstantImage.instance.constImagePath,
                   ),
                   Text(items[index]!.fname.toString()),
                   Text("${items[index]!.fiyat} tl")

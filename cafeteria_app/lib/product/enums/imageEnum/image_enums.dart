@@ -1,1 +1,7 @@
-enum ImagePaths { starters, meat, starches }
+enum ImagePaths {
+  starters,
+  meat,
+  starches,
+  gunsel,
+  card,
+}

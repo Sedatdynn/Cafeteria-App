@@ -65,6 +65,8 @@ flutter:
     - assets/category/
     - assets/meals/
     - assets/button/
+    - assets/error/
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

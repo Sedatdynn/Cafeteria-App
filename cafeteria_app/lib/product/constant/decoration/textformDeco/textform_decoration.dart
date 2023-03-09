@@ -1,4 +1,4 @@
-import 'package:cafeteria_app/core/const/border_responsive_shelf.dart';
+import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/color/colors.dart';

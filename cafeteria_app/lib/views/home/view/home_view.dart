@@ -14,6 +14,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../product/constant/image/const_image.dart';
 import '../../../product/enums/imageEnum/image_enums.dart';
+import '../../../product/widget/connection/no_connection.dart';
 import '../../../product/widget/image/clip_rect_image.dart';
 import '../../../product/widget/loading/widget_loading.dart';
 import '../../../product/widget/noData/widget_no_data.dart';
@@ -42,8 +43,7 @@ class _HomeViewState extends State<HomeView> {
         body: BlocListener<InternetCubit, InternetState>(
           listener: (context, state) {
             if (state is InternetConnected) {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(buildConnectedSnackBar(state));
+              buildInternetConnection(context, state);
             } else if (state is InternetNotConnected) {
               buildNotConnectedDialog(context, state);
             }
@@ -63,6 +63,16 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  void buildInternetConnection(BuildContext context, InternetConnected state) {
+    ScaffoldMessenger.of(context).showSnackBar(buildConnectedSnackBar(state));
+    context.read<HomeCubit>().fetchAllProduct();
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomeView(),
+        ));
+  }
+
   SnackBar buildConnectedSnackBar(InternetConnected state) =>
       SnackBar(content: Text(state.message));
 
@@ -80,7 +90,11 @@ class _HomeViewState extends State<HomeView> {
           CupertinoDialogAction(
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) {
+                        return const NoConnectionView();
+                      },
+                    ));
                   },
                   child: const Text(HomeTexts.ok)))
         ],

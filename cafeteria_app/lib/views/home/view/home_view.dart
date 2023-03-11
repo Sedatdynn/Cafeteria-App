@@ -1,25 +1,17 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
-import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
-import 'package:cafeteria_app/product/extension/images/jpg_extension.dart';
-import 'package:cafeteria_app/product/navigator/app_router.dart';
-import 'package:cafeteria_app/product/widget/appBar/custom_appBar.dart';
-import 'package:cafeteria_app/product/widget/button/active_button.dart';
-import 'package:cafeteria_app/product/widget/textformField/sized_box.dart';
-import 'package:cafeteria_app/views/home/home_shelf.dart';
+import '../../../product/constant/product_const_shelf.dart';
+import '../../../product/extension/images/jpg_extension.dart';
+import '../home_shelf.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../../../product/constant/image/const_image.dart';
+
+import '../../../core/theme/theme_color_shelf.dart';
 import '../../../product/enums/imageEnum/image_enums.dart';
-import '../../../product/widget/connection/no_connection.dart';
-import '../../../product/widget/image/clip_rect_image.dart';
-import '../../../product/widget/loading/widget_loading.dart';
-import '../../../product/widget/noData/widget_no_data.dart';
+import '../../../product/navigator/app_router.dart';
+import '../../../product/widget/widgets_shelf.dart';
 import '../../drawer/drawer.dart';
-import '../cubit/internetCubit/internet_cubit.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
@@ -292,12 +284,6 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  String checkDay() {
-    final DateTime now = DateTime.now();
-    final String today = DateFormat('EEEEE', 'en_US').format(now);
-    return today;
-  }
-
   Container buildCategoryCard(
       double width, Widget image, String data, BuildContext context) {
     return Container(
@@ -322,8 +308,9 @@ class _HomeViewState extends State<HomeView> {
 
 //TODO custom title field
   Widget buildDayField(BuildContext context) {
+    String today = context.watch<HomeCubit>().checkDay();
     return Text(
-      checkDay(),
+      today,
       style: Theme.of(context)
           .textTheme
           .headlineSmall

@@ -1,11 +1,13 @@
 import 'dart:io';
-import 'package:cafeteria_app/core/theme/theme_color_shelf.dart';
-import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
-import 'package:cafeteria_app/views/home/cubit/internetCubit/internet_cubit.dart';
-import 'package:cafeteria_app/views/home/home_shelf.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'core/theme/theme_color_shelf.dart';
+import 'product/constant/product_const_shelf.dart';
 import 'product/navigator/app_router.dart';
+import 'product/widget/widgets_shelf.dart';
+import 'views/home/home_shelf.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,15 +45,5 @@ class MyApp extends StatelessWidget {
             primarySwatch: AppColors.primarySwatch,
           ),
         ));
-  }
-}
-
-//TODO move this class to another page
-class MyHttpOverrides extends HttpOverrides {
-  @override
-  HttpClient createHttpClient(SecurityContext? context) {
-    return super.createHttpClient(context)
-      ..badCertificateCallback =
-          (X509Certificate cert, String host, int port) => true;
   }
 }

@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
-import '../../model/items_model.dart';
-
 part 'internet_state.dart';
 
 class InternetCubit extends Cubit<InternetState> {

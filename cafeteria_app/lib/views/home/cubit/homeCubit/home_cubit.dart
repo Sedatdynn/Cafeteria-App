@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:intl/intl.dart';
 import '../../model/items_model.dart';
 import '../../service/items_service.dart';
 import 'home_state.dart';
@@ -27,5 +28,11 @@ class HomeCubit extends Cubit<HomeState> {
     } catch (e) {
       emit(HomeError(e.toString()));
     }
+  }
+
+  String checkDay() {
+    final DateTime now = DateTime.now();
+    final String today = DateFormat('EEEEE', 'en_US').format(now);
+    return today;
   }
 }

@@ -1,13 +1,9 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/product/widget/appBar/custom_appBar.dart';
-import 'package:cafeteria_app/product/widget/button/active_button.dart';
-import '../../product/widget/textformField/textform_field.dart';
-import '../../product/widget/textformField/textform_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/theme/theme_color_shelf.dart';
+
 import '../../product/constant/product_const_shelf.dart';
-import '../../product/widget/textformField/sized_box.dart';
+import '../../product/widget/widgets_shelf.dart';
 import '../home/home_shelf.dart';
 
 class PaymentPageView extends StatefulWidget {

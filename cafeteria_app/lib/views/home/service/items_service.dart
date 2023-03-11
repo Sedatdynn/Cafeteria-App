@@ -22,25 +22,32 @@ class GeneralService extends IGeneralService {
 
   @override
   Future<dynamic> fetchProductItems(int index) async {
-    final response = await dio.get("/$item");
-    if (response.statusCode == HttpStatus.ok) {
-      final jsonBody = response.data;
-      if (jsonBody is Map<String, dynamic>) {
-        final modelData = ItemsModel.fromJson(jsonBody);
-        final DateTime now = DateTime.now();
-        String today = DateFormat('EEEEE', 'en_US').format(now);
-        final List days = [
-          "monday",
-          "tuesday",
-          "wednesday",
-          "thursday",
-          "friday"
-        ];
+    try {
+      final response = await dio.get("/$item");
+      if (response.statusCode == HttpStatus.ok) {
+        final jsonBody = response.data;
+        if (jsonBody is Map<String, dynamic>) {
+          final modelData = ItemsModel.fromJson(jsonBody);
+          final DateTime now = DateTime.now();
+          String today = DateFormat('EEEEE', 'en_US').format(now);
+          final List days = [
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday"
+          ];
 
-        int dayIndex = days.indexOf(today.toLowerCase());
-        return modelData.days![dayIndex].contents![index].foods;
+          int dayIndex = days.indexOf(today.toLowerCase());
+          if (dayIndex >= 0) {
+            return modelData.days![dayIndex].contents![index].foods;
+          } else {
+            return modelData.days![0].contents![index].foods;
+          }
+        }
       }
+    } catch (e) {
+      throw e.toString();
     }
-    throw 'Something went wrong';
   }
 }

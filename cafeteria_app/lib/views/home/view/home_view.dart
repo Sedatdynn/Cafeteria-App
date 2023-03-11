@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cafeteria_app/product/init/app_localization.dart';
 import '../../../product/constant/product_const_shelf.dart';
 import '../../../product/extension/images/jpg_extension.dart';
 import '../home_shelf.dart';
@@ -177,7 +178,8 @@ class _HomeViewState extends State<HomeView> {
     List selectedFood = context.watch<HomeCubit>().isSelectFood;
     List eachFoodPrice = context.watch<HomeCubit>().eachFoodPrice;
     return ActiveButton(
-      label: HomeTexts.paymentText,
+      label: "payment".tr(context),
+      // label: HomeTexts.paymentText,
       onPressed: () {
         context.read<HomeCubit>().totalPay > 0
             ? context.router.navigate(OrderRoute(

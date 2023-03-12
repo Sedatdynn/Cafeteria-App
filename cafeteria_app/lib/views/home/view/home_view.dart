@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cafeteria_app/product/init/app_localization.dart';
 import '../../../product/constant/product_const_shelf.dart';
 import '../../../product/extension/images/jpg_extension.dart';
+import '../cubit/localeCubit/locale_cubit.dart';
 import '../home_shelf.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,11 +27,38 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: CustomAppBar(
-          isBack: false,
-          context: context,
-          title: MainTexts.appTitle,
+        appBar: AppBar(
+          title: const Text(MainTexts.appTitle),
+          actions: [
+            BlocBuilder<LocaleCubit, LocaleState>(
+              builder: (context, state) {
+                if (state is ChangeLocaleState) {
+                  return DropdownButton<String>(
+                    value: state.locale.languageCode,
+                    icon: const Icon(Icons.keyboard_arrow_down),
+                    items: ['tr', 'en'].map((String items) {
+                      return DropdownMenuItem<String>(
+                        value: items,
+                        child: Text(items),
+                      );
+                    }).toList(),
+                    onChanged: (String? newValue) {
+                      if (newValue != null) {
+                        context.read<LocaleCubit>().changeLanguage(newValue);
+                      }
+                    },
+                  );
+                }
+                return SizedBox();
+              },
+            )
+          ],
         ),
+        // CustomAppBar(
+        //   isBack: false,
+        //   context: context,
+        //   title: MainTexts.appTitle,
+        // ),
         drawer: const NavigationDrawerMenu(),
         backgroundColor: AppColors.lightGrey,
         body: BlocListener<InternetCubit, InternetState>(

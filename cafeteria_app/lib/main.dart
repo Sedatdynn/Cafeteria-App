@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:cafeteria_app/product/init/app_localization.dart';
+import 'package:cafeteria_app/views/home/cubit/localeCubit/locale_cubit.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,6 +27,11 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) {
+              return LocaleCubit()..getSavedLanguage();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
               return InternetCubit()..checkConnection();
             },
           ),
@@ -37,31 +43,41 @@ class MyApp extends StatelessWidget {
             },
           ),
         ],
-        child: MaterialApp.router(
-          routerDelegate: _appRouter.delegate(),
-          routeInformationParser: _appRouter.defaultRouteParser(),
-          debugShowCheckedModeBanner: false,
-          title: MainTexts.appTitle,
-          supportedLocales: const [Locale('en'), Locale('tr')],
-          localizationsDelegates: const [
-            AppLocalizations.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate
-          ],
-          localeResolutionCallback: (deviceLocale, supportedLocales) {
-            for (var locale in supportedLocales) {
-              if (deviceLocale != null &&
-                  deviceLocale.languageCode == locale.languageCode) {
-                return deviceLocale;
-              }
-            }
+        child: BlocBuilder<LocaleCubit, LocaleState>(
+          builder: (context, state) {
+            if (state is LocaleInitial) {
+              return const LoadingView();
+            } else if (state is ChangeLocaleState) {
+              return MaterialApp.router(
+                locale: state.locale,
+                routerDelegate: _appRouter.delegate(),
+                routeInformationParser: _appRouter.defaultRouteParser(),
+                debugShowCheckedModeBanner: false,
+                title: MainTexts.appTitle,
+                supportedLocales: const [Locale('en'), Locale('tr')],
+                localizationsDelegates: const [
+                  AppLocalizations.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate
+                ],
+                localeResolutionCallback: (deviceLocale, supportedLocales) {
+                  for (var locale in supportedLocales) {
+                    if (deviceLocale != null &&
+                        deviceLocale.languageCode == locale.languageCode) {
+                      return deviceLocale;
+                    }
+                  }
 
-            return supportedLocales.first;
+                  return supportedLocales.first;
+                },
+                theme: ThemeData(
+                  primarySwatch: AppColors.primarySwatch,
+                ),
+              );
+            }
+            return const NoDataView();
           },
-          theme: ThemeData(
-            primarySwatch: AppColors.primarySwatch,
-          ),
         ));
   }
 }

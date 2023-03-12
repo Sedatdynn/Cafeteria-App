@@ -1,4 +1,17 @@
 {
     "payment":"payment",
-    "cafeteria":"Cafeteria App"
+    "cafeteria":"Cafeteria App",
+    "menuCategory" : "Menu Category",
+    "totalPrice": "Total Price is: ",
+    "creditCard": "CreditCard",
+    "gunselCard": "GunselCard",
+    "cardNumber": "Card Number",
+    "expirationDate": "Expiration Date",
+    "monthYear": "MM/YY",
+    "securityCode": "Security Code",
+    "cvc": "CVC",
+    "completePayment": "Complete Payment",
+    "starters": "Starters",
+    "starches": "Starches",
+    "meat": "Meat"
 }

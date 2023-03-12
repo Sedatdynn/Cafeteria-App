@@ -1,6 +1,19 @@
 {
     "payment":"Ödeme",
-    "cafeteria":"Kafeterya Uygulamasi"
+    "cafeteria":"Kafeterya Uygulamasi",
+    "menuCategory" : "Menu Kategori",
+    "totalPrice": "Toplam Fiyat: ",
+    "creditCard": "KrediKart",
+    "gunselCard": "GunselKart",
+    "cardNumber": "Kart Numarası",
+    "expirationDate": "Son Kullanma Tarihi",
+    "monthYear": "AA/YY",
+    "securityCode": "Güvenlik Kodu",
+    "cvc": "CVC",
+    "completePayment": "Ödemeyei Tamamla",
+    "starters": "Başlangıç",
+    "starches": "Bulgur",
+    "meat": "Et"
 }
 
 

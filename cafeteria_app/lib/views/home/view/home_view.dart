@@ -28,7 +28,7 @@ class _HomeViewState extends State<HomeView> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(MainTexts.appTitle),
+          title: Text("cafeteria".tr(context)),
           actions: [
             BlocBuilder<LocaleCubit, LocaleState>(
               builder: (context, state) {
@@ -49,16 +49,11 @@ class _HomeViewState extends State<HomeView> {
                     },
                   );
                 }
-                return SizedBox();
+                return const SizedBox();
               },
             )
           ],
         ),
-        // CustomAppBar(
-        //   isBack: false,
-        //   context: context,
-        //   title: MainTexts.appTitle,
-        // ),
         drawer: const NavigationDrawerMenu(),
         backgroundColor: AppColors.lightGrey,
         body: BlocListener<InternetCubit, InternetState>(
@@ -117,7 +112,7 @@ class _HomeViewState extends State<HomeView> {
                       },
                     ));
                   },
-                  child: const Text(HomeTexts.ok)))
+                  child: Text("ok".tr(context))))
         ],
       ),
     );
@@ -173,7 +168,7 @@ class _HomeViewState extends State<HomeView> {
           child: buildCategoryCard(
               context.width,
               ImagePaths.starters.toJpgImage(context),
-              HomeTexts.startersText,
+              "starters".tr(context),
               context),
         ),
         InkWell(
@@ -185,7 +180,7 @@ class _HomeViewState extends State<HomeView> {
               ImagePaths.starches.toJpgImage(
                 context,
               ),
-              HomeTexts.starchesText,
+              "starches".tr(context),
               context),
         ),
         InkWell(
@@ -195,7 +190,7 @@ class _HomeViewState extends State<HomeView> {
             child: buildCategoryCard(
                 context.width,
                 ImagePaths.meat.toJpgImage(context),
-                HomeTexts.meatText,
+                "meat".tr(context),
                 context)),
       ],
     );
@@ -207,7 +202,6 @@ class _HomeViewState extends State<HomeView> {
     List eachFoodPrice = context.watch<HomeCubit>().eachFoodPrice;
     return ActiveButton(
       label: "payment".tr(context),
-      // label: HomeTexts.paymentText,
       onPressed: () {
         context.read<HomeCubit>().totalPay > 0
             ? context.router.navigate(OrderRoute(
@@ -350,7 +344,7 @@ class _HomeViewState extends State<HomeView> {
 
   Text buildMainTextTitle() {
     return Text(
-      HomeTexts.homeMenuText,
+      "menuCategory".tr(context),
       style: Theme.of(context)
           .textTheme
           .headlineSmall

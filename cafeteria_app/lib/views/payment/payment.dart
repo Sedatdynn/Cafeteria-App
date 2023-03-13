@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cafeteria_app/product/init/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,7 +27,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
     return Scaffold(
       appBar: CustomAppBar(
         context: context,
-        title: MainTexts.appTitle,
+        title: "cafeteria".tr(context),
       ),
       body: buildMainBody(context),
     );
@@ -43,19 +44,22 @@ class _PaymentPageViewState extends State<PaymentPageView> {
               child: buildTitleText(context),
             ),
             ConstSpace(height: context.dynamicHeight(0.1)),
-            const TextFormTitle(PaymentTexts.cardNumber),
+            TextFormTitle("cardNumber".tr(context)), //
+
             const ConstSpace(),
             buildCardNumberTextformField(),
             SizedBox(
               height: context.dynamicHeight(0.03),
             ),
-            const TextFormTitle(PaymentTexts.dateText),
+            TextFormTitle("expirationDate".tr(context)),
             const ConstSpace(),
             buildDateTextformField(),
             SizedBox(
               height: context.dynamicHeight(0.03),
             ),
-            const TextFormTitle(PaymentTexts.securityCode),
+            TextFormTitle(
+              "securityCode".tr(context),
+            ),
             const ConstSpace(),
             buildCvcTextformField(),
             const ConstSpace(),
@@ -68,19 +72,20 @@ class _PaymentPageViewState extends State<PaymentPageView> {
 
   Text buildTitleText(BuildContext context) {
     return Text(
-      " Total Price:  ${widget.totalFee.toString()} tl  ",
+      "${"totalPrice".tr(context) + widget.totalFee.toString()} tl",
       style: Theme.of(context).textTheme.headlineMedium,
     );
   }
 
   buildCardNumberTextformField() {
     return PaymentTextField(
-        controller: cardController,
-        validator: (p0) {},
-        maxLength: 16,
-        keyboardType: TextInputType.number,
-        mainIcon: Icons.credit_card_outlined,
-        labelText: PaymentTexts.cardNumber);
+      controller: cardController,
+      validator: (p0) {},
+      maxLength: 16,
+      keyboardType: TextInputType.number,
+      mainIcon: Icons.credit_card_outlined,
+      labelText: "cardNumber".tr(context),
+    );
   }
 
   buildDateTextformField() {
@@ -89,28 +94,32 @@ class _PaymentPageViewState extends State<PaymentPageView> {
       validator: (p0) {},
       maxLength: 5,
       keyboardType: TextInputType.datetime,
-      labelText: PaymentTexts.mmyyText,
+      labelText: "monthYear".tr(context),
       mainIcon: Icons.date_range,
     );
   }
 
   buildCvcTextformField() {
     return PaymentTextField(
-        controller: cvcController,
-        validator: (p0) {},
-        maxLength: 3,
-        keyboardType: TextInputType.number,
-        mainIcon: Icons.security_outlined,
-        labelText: PaymentTexts.cvcText);
+      controller: cvcController,
+      validator: (p0) {},
+      maxLength: 3,
+      keyboardType: TextInputType.number,
+      mainIcon: Icons.security_outlined,
+      labelText: "cvc".tr(context),
+    );
   }
 
   buildButton(BuildContext context) {
     return Center(
       child: ActiveButton(
         width: context.dynamicWidth(0.7),
-        label: PaymentTexts.payComplete,
+        label: "completePayment".tr(context),
         onPressed: () {
-          warningToast(context, PaymentTexts.paySuccess);
+          warningToast(
+            context,
+            "paySuccess".tr(context),
+          );
           Future.delayed(CustomDuration.lowDuration);
           context.read<HomeCubit>().isSelectFood.clear();
           context.read<HomeCubit>().eachFoodPrice.clear();

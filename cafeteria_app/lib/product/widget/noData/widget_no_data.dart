@@ -1,4 +1,4 @@
-import 'package:cafeteria_app/product/constant/product_const_shelf.dart';
+import 'package:cafeteria_app/product/init/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class NoDataView extends StatelessWidget {
@@ -8,6 +8,6 @@ class NoDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(child: Text(ErrorTexts.wrongText));
+    return Center(child: Text("wrongText".tr(context)));
   }
 }

@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/theme/theme_color_shelf.dart';
-import 'product/constant/product_const_shelf.dart';
 import 'product/navigator/app_router.dart';
 import 'product/widget/widgets_shelf.dart';
 import 'views/home/home_shelf.dart';
@@ -53,7 +52,7 @@ class MyApp extends StatelessWidget {
                 routerDelegate: _appRouter.delegate(),
                 routeInformationParser: _appRouter.defaultRouteParser(),
                 debugShowCheckedModeBanner: false,
-                title: MainTexts.appTitle,
+                title: "cafeteria".tr(context),
                 supportedLocales: const [Locale('en'), Locale('tr')],
                 localizationsDelegates: const [
                   AppLocalizations.delegate,

@@ -1,6 +1,14 @@
 {
-    "payment":"payment",
     "cafeteria":"Cafeteria App",
+    "home":"Home",
+    "history":"History",
+    "settings":"Settings",
+    "logOut":"Log Out",
+    "ok":"Ok",
+    "cardInfo": "Card Information",
+    "paySuccess": "Payment completed successfully ",
+    "wrongText": "Something went wrong!",
+    "payment":"Payment",
     "menuCategory" : "Menu Category",
     "totalPrice": "Total Price is: ",
     "creditCard": "CreditCard",
@@ -13,5 +21,14 @@
     "completePayment": "Complete Payment",
     "starters": "Starters",
     "starches": "Starches",
-    "meat": "Meat"
+    "meat": "Meat",
+    "Veal": "Veal",
+    "chickenMeat": "Chicken Meat",
+    "pasta": "Pasta",
+    "rice": "Rice",
+    "wrongMeat": "Wrong Choice of Meat!",
+    "wrongPasta": "Wrong Choice of Pasta/Rice!",
+    "noFee": "Don't have right to eat free!",
+    "remainRight": " Remaining right: ",
+    "totalFoodControl": "If you choose more than 3 dishes, you must pay with a credit card!"
 }

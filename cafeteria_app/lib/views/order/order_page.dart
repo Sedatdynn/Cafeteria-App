@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cafeteria_app/product/init/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,7 +55,7 @@ class _OrderViewState extends State<OrderView> {
     return Scaffold(
       appBar: CustomAppBar(
         context: context,
-        title: "Total price is: ${widget.totalMoney} tl",
+        title: "${"totalPrice".tr(context) + widget.totalMoney.toString()} tl",
       ),
       body: buildBodyField(context),
     );
@@ -122,18 +123,19 @@ class _OrderViewState extends State<OrderView> {
 
   buildGunselButton(BuildContext context) {
     return CardButton(
-        text: OrderTexts.gunselButtonText,
+        text: "gunselCard".tr(context),
         onPressed: () {
           widget.isSelectedFood.length <= 3
               ? checkEmployee()
-              : warningToast(context, CheckFoodText.totalFoodControl);
+              : warningToast(context, "totalPrice".tr(context));
+          // : warningToast(context, CheckFoodText.totalFoodControl);
         },
         icon: ImagePaths.gunsel.toPngImage(context));
   }
 
   buildCreditCardButton(BuildContext context) {
     return CardButton(
-        text: OrderTexts.creditButtonText,
+        text: "creditCard".tr(context),
         onPressed: () => context.router
             .navigate(PaymentPageRoute(totalFee: widget.totalMoney)),
         icon: ImagePaths.card.toPngImage(context));
@@ -149,15 +151,15 @@ class _OrderViewState extends State<OrderView> {
     int freeFoodCount = allEmployees[element] ?? 0;
     if (freeFoodCount > 0) {
       if (widget.isSelectedFood.length <= 3) {
-        if (widget.isSelectedFood.contains(CheckFoodText.danaEti) &&
-            widget.isSelectedFood.contains(CheckFoodText.tavukEti)) {
-          await warningToast(context, CheckFoodText.hataliEt);
-        } else if (widget.isSelectedFood.contains(CheckFoodText.makarna) &&
-            widget.isSelectedFood.contains(CheckFoodText.pilav)) {
-          await warningToast(context, CheckFoodText.hatalimakarna);
+        if (widget.isSelectedFood.contains("veal".tr(context)) &&
+            widget.isSelectedFood.contains("chickenMeat".tr(context))) {
+          await warningToast(context, "wrongMeat".tr(context));
+        } else if (widget.isSelectedFood.contains("pasta".tr(context)) &&
+            widget.isSelectedFood.contains("rice".tr(context))) {
+          await warningToast(context, "wrongPasta".tr(context));
         } else if (freeFoodCount >= 0) {
           await warningToast(context,
-              "$element${CheckFoodText.basariliOdeme} Kalan hak: ${freeFoodCount - 1}");
+              "$element ${"paySuccess".tr(context) + "remainRight".tr(context) + (freeFoodCount - 1).toString()}");
           Future.delayed(CustomDuration.lowDuration);
           clearSelectedFood;
           clearEachFoodPrice;
@@ -166,7 +168,7 @@ class _OrderViewState extends State<OrderView> {
         }
       }
     } else {
-      await warningToast(context, element + CheckFoodText.gecersiz);
+      await warningToast(context, element + "noFee".tr(context));
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
-import 'package:cafeteria_app/product/init/app_localization.dart';
-import 'package:cafeteria_app/views/home/cubit/localeCubit/locale_cubit.dart';
+import 'product/init/app_localization.dart';
+import 'views/home/cubit/localeCubit/locale_cubit.dart';
+import 'package:flutter_bloc/src/bloc_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,29 +24,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) {
-              return LocaleCubit()..getSavedLanguage();
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              return InternetCubit()..checkConnection();
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              return HomeCubit(GeneralService(
-                  ProjectNetworkManager.instance.service, "QFj-hS"))
-                ..fetchAllProduct();
-            },
-          ),
-        ],
+        providers: appProviders,
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, state) {
             if (state is LocaleInitial) {
-              return const LoadingView();
+              return MaterialApp(
+                title: "cafeteria".tr(context),
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  primarySwatch: AppColors.primarySwatch,
+                ),
+                home: const LoadingView(),
+              );
             } else if (state is ChangeLocaleState) {
               return MaterialApp.router(
                 locale: state.locale,
@@ -77,5 +67,27 @@ class MyApp extends StatelessWidget {
             return const NoDataView();
           },
         ));
+  }
+
+  List<BlocProviderSingleChildWidget> get appProviders {
+    return [
+      BlocProvider(
+        create: (context) {
+          return LocaleCubit()..getSavedLanguage();
+        },
+      ),
+      BlocProvider(
+        create: (context) {
+          return InternetCubit()..checkConnection();
+        },
+      ),
+      BlocProvider(
+        create: (context) {
+          return HomeCubit(
+              GeneralService(ProjectNetworkManager.instance.service, "QFj-hS"))
+            ..fetchAllProduct();
+        },
+      ),
+    ];
   }
 }

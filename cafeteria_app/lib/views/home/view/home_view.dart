@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:cafeteria_app/product/init/app_localization.dart';
 import '../../../product/constant/product_const_shelf.dart';
 import '../../../product/extension/images/jpg_extension.dart';
+import '../../../product/widget/text/title_text.dart';
 import '../cubit/localeCubit/locale_cubit.dart';
 import '../home_shelf.dart';
 import 'package:flutter/cupertino.dart';
@@ -133,7 +134,7 @@ class _HomeViewState extends State<HomeView> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 buildDayField(context),
-                buildMainTextTitle(),
+                TitleText(text: "menuCategory".tr(context))
               ],
             ),
             ConstSpace(height: context.dynamicHeight(0.02)),
@@ -335,25 +336,8 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-//TODO custom title field
   Widget buildDayField(BuildContext context) {
     String today = context.watch<HomeCubit>().checkDay();
-    return Text(
-      today,
-      style: Theme.of(context)
-          .textTheme
-          .headlineSmall
-          ?.copyWith(fontWeight: FontWeight.bold),
-    );
-  }
-
-  Text buildMainTextTitle() {
-    return Text(
-      "menuCategory".tr(context),
-      style: Theme.of(context)
-          .textTheme
-          .headlineSmall
-          ?.copyWith(fontWeight: FontWeight.bold),
-    );
+    return TitleText(text: today);
   }
 }

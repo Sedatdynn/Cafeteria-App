@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cafeteria_app/product/init/app_localization.dart';
+import 'package:cafeteria_app/product/widget/text/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -40,12 +41,15 @@ class _PaymentPageViewState extends State<PaymentPageView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
-              child: buildTitleText(context),
+            Align(
+              alignment: Alignment.center,
+              child: TitleText(
+                text:
+                    "${"totalPrice".tr(context) + widget.totalFee.toString()} tl",
+              ),
             ),
             ConstSpace(height: context.dynamicHeight(0.1)),
-            TextFormTitle("cardNumber".tr(context)), //
-
+            TextFormTitle("cardNumber".tr(context)),
             const ConstSpace(),
             buildCardNumberTextformField(),
             SizedBox(
@@ -67,13 +71,6 @@ class _PaymentPageViewState extends State<PaymentPageView> {
           ],
         ),
       ),
-    );
-  }
-
-  Text buildTitleText(BuildContext context) {
-    return Text(
-      "${"totalPrice".tr(context) + widget.totalFee.toString()} tl",
-      style: Theme.of(context).textTheme.headlineMedium,
     );
   }
 

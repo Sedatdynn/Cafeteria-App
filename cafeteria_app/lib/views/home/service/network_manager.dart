@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 class ProjectNetworkManager {
   ProjectNetworkManager._() {
-    _dio = Dio(BaseOptions(baseUrl: "https://www.jsonkeeper.com/b"));
+    _dio = Dio(BaseOptions(baseUrl: "https://api.jsonserve.com"));
   }
   late final Dio _dio;
 

@@ -44,13 +44,13 @@ Map<String, dynamic> _$ContentsToJson(Contents instance) => <String, dynamic>{
     };
 
 Foods _$FoodsFromJson(Map<String, dynamic> json) => Foods(
-      fiyat: json['fiyat'] as int?,
       fname: json['fname'] as String?,
+      price: json['price'] as int?,
       isSelected: json['isSelected'] as bool?,
     );
 
 Map<String, dynamic> _$FoodsToJson(Foods instance) => <String, dynamic>{
-      'fiyat': instance.fiyat,
       'fname': instance.fname,
+      'price': instance.price,
       'isSelected': instance.isSelected,
     };

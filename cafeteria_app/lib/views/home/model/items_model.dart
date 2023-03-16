@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part "items_model.g.dart";
@@ -52,11 +53,11 @@ class Contents {
 
 @JsonSerializable()
 class Foods {
-  int? fiyat;
   String? fname;
+  int? price;
   bool? isSelected;
 
-  Foods({this.fiyat, this.fname, this.isSelected});
+  Foods({this.fname, this.price, this.isSelected});
 
   factory Foods.fromJson(Map<String, dynamic> json) {
     return _$FoodsFromJson(json);

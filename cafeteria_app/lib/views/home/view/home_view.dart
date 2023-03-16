@@ -33,21 +33,7 @@ class _HomeViewState extends State<HomeView> {
             BlocBuilder<LocaleCubit, LocaleState>(
               builder: (context, state) {
                 if (state is ChangeLocaleState) {
-                  return DropdownButton<String>(
-                    value: state.locale.languageCode,
-                    icon: const Icon(Icons.keyboard_arrow_down),
-                    items: ['tr', 'en'].map((String items) {
-                      return DropdownMenuItem<String>(
-                        value: items,
-                        child: Text(items),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      if (newValue != null) {
-                        context.read<LocaleCubit>().changeLanguage(newValue);
-                      }
-                    },
-                  );
+                  return DropDownButtonWidget(state, context);
                 }
                 return const SizedBox();
               },
@@ -76,6 +62,25 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
       ),
+    );
+  }
+
+  DropdownButton<String> DropDownButtonWidget(
+      ChangeLocaleState state, BuildContext context) {
+    return DropdownButton<String>(
+      value: state.locale.languageCode,
+      icon: const Icon(Icons.keyboard_arrow_down),
+      items: ['tr', 'en'].map((String items) {
+        return DropdownMenuItem<String>(
+          value: items,
+          child: Text(items),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        if (newValue != null) {
+          context.read<LocaleCubit>().changeLanguage(newValue);
+        }
+      },
     );
   }
 
@@ -251,7 +256,7 @@ class _HomeViewState extends State<HomeView> {
                         AppConstantImage.instance.constImagePath,
                   ),
                   Text(items[index]!.fname.toString()),
-                  Text("${items[index]!.fiyat} tl")
+                  Text("${items[index]!.price} tl")
                 ],
               ),
             ),
@@ -288,8 +293,8 @@ class _HomeViewState extends State<HomeView> {
               .contains(items[index]!.fname)) {
         correctCheck();
         context.read<HomeCubit>().isSelectFood.add(items[index]!.fname);
-        context.read<HomeCubit>().eachFoodPrice.add(items[index]!.fiyat);
-        context.read<HomeCubit>().totalPay += items[index]!.fiyat!;
+        context.read<HomeCubit>().eachFoodPrice.add(items[index]!.price);
+        context.read<HomeCubit>().totalPay += items[index]!.price!;
       } else if (context
           .read<HomeCubit>()
           .isSelectFood
@@ -298,9 +303,9 @@ class _HomeViewState extends State<HomeView> {
 
         final name = items[index]!.fname!;
         context.read<HomeCubit>().isSelectFood.remove(name);
-        context.read<HomeCubit>().eachFoodPrice.remove(items[index]!.fiyat);
+        context.read<HomeCubit>().eachFoodPrice.remove(items[index]!.price);
 
-        context.read<HomeCubit>().totalPay -= items[index]!.fiyat!;
+        context.read<HomeCubit>().totalPay -= items[index]!.price!;
         prefs!.remove(items[index]!.fname!);
       } else {
         prefs!.remove(items[index]!.fname!);

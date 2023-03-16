@@ -31,11 +31,11 @@ class GeneralService extends IGeneralService {
           final DateTime now = DateTime.now();
           String today = DateFormat('EEEEE', 'en_US').format(now);
           final List days = [
-            "monday",
-            "tuesday",
-            "wednesday",
-            "thursday",
-            "friday"
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday"
           ];
 
           int dayIndex = days.indexOf(today.toLowerCase());

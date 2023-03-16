@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) {
               return HomeCubit(GeneralService(
-                  ProjectNetworkManager.instance.service, "EL0E"))
+                  ProjectNetworkManager.instance.service, "QFj-hS"))
                 ..fetchAllProduct();
             },
           ),
@@ -67,7 +67,6 @@ class MyApp extends StatelessWidget {
                       return deviceLocale;
                     }
                   }
-
                   return supportedLocales.first;
                 },
                 theme: ThemeData(

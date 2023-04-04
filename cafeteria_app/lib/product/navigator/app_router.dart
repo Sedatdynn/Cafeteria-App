@@ -1,17 +1,19 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/views/home/home_shelf.dart';
-import 'package:cafeteria_app/views/order/order_page.dart';
-import 'package:cafeteria_app/views/payment/payment.dart';
-import 'package:flutter/material.dart';
 
-part 'app_router.gr.dart';
+import 'app_router.gr.dart';
 
-@MaterialAutoRouter(
-  replaceInRouteName: 'View,Route',
-  routes: <AutoRoute>[
-    AutoRoute(page: HomeView, path: "/home", initial: true),
-    AutoRoute(page: OrderView, path: "/order"),
-    AutoRoute(page: PaymentPageView, path: "/payment"),
-  ],
-)
-class AppRouter extends _$AppRouter {}
+@AutoRouterConfig(replaceInRouteName: 'View,Route')
+class AppRouter extends $AppRouter {
+  @override
+  RouteType get defaultRouteType => const RouteType.material();
+
+  @override
+  final List<AutoRoute> routes = [
+    AutoRoute(page: HomeRoute.page, path: "/"),
+    AutoRoute(page: OrderRoute.page, path: "/order"),
+    AutoRoute(page: PaymentPageRoute.page, path: "/detail"),
+    AutoRoute(page: NoConnectionRoute.page, path: "/noConnection"),
+    AutoRoute(page: LoadingRoute.page, path: "/loading"),
+    AutoRoute(page: NoDataRoute.page, path: "/noData"),
+  ];
+}

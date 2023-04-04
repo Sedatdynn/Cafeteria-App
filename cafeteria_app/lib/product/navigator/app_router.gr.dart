@@ -1,33 +1,59 @@
-// **************************************************************************
-// AutoRouteGenerator
-// **************************************************************************
-
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
-// AutoRouteGenerator
+// AutoRouterGenerator
 // **************************************************************************
-//
+
 // ignore_for_file: type=lint
+// coverage:ignore-file
 
-part of 'app_router.dart';
+// ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:auto_route/auto_route.dart' as _i7;
+import 'package:cafeteria_app/product/widget/connection/no_connection.dart'
+    as _i1;
+import 'package:cafeteria_app/product/widget/loading/widget_loading.dart'
+    as _i2;
+import 'package:cafeteria_app/product/widget/noData/widget_no_data.dart' as _i3;
+import 'package:cafeteria_app/views/home/view/home_view.dart' as _i4;
+import 'package:cafeteria_app/views/order/order_page.dart' as _i5;
+import 'package:cafeteria_app/views/payment/payment.dart' as _i6;
+import 'package:flutter/material.dart' as _i8;
 
-class _$AppRouter extends RootStackRouter {
-  _$AppRouter([GlobalKey<NavigatorState>? navigatorKey]) : super(navigatorKey);
+abstract class $AppRouter extends _i7.RootStackRouter {
+  $AppRouter([_i8.GlobalKey<_i8.NavigatorState>? navigatorKey])
+      : super(navigatorKey);
 
   @override
-  final Map<String, PageFactory> pagesMap = {
-    HomeRoute.name: (routeData) {
-      return MaterialPageX<dynamic>(
+  final Map<String, _i7.PageFactory> pagesMap = {
+    NoConnectionRoute.name: (routeData) {
+      return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const HomeView(),
+        child: const _i1.NoConnectionView(),
+      );
+    },
+    LoadingRoute.name: (routeData) {
+      return _i7.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i2.LoadingView(),
+      );
+    },
+    NoDataRoute.name: (routeData) {
+      return _i7.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i3.NoDataView(),
+      );
+    },
+    HomeRoute.name: (routeData) {
+      return _i7.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i4.HomeView(),
       );
     },
     OrderRoute.name: (routeData) {
       final args = routeData.argsAs<OrderRouteArgs>();
-      return MaterialPageX<dynamic>(
+      return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: OrderView(
+        child: _i5.OrderView(
           key: args.key,
           totalMoney: args.totalMoney,
           isSelectedFood: args.isSelectedFood,
@@ -37,71 +63,97 @@ class _$AppRouter extends RootStackRouter {
     },
     PaymentPageRoute.name: (routeData) {
       final args = routeData.argsAs<PaymentPageRouteArgs>();
-      return MaterialPageX<dynamic>(
+      return _i7.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: PaymentPageView(
+        child: _i6.PaymentPageView(
           key: args.key,
           totalFee: args.totalFee,
         ),
       );
     },
   };
-
-  @override
-  List<RouteConfig> get routes => [
-        RouteConfig(
-          '/#redirect',
-          path: '/',
-          redirectTo: '/home',
-          fullMatch: true,
-        ),
-        RouteConfig(
-          HomeRoute.name,
-          path: '/home',
-        ),
-        RouteConfig(
-          OrderRoute.name,
-          path: '/order',
-        ),
-        RouteConfig(
-          PaymentPageRoute.name,
-          path: '/payment',
-        ),
-      ];
 }
 
 /// generated route for
-/// [HomeView]
-class HomeRoute extends PageRouteInfo<void> {
-  const HomeRoute()
+/// [_i1.NoConnectionView]
+class NoConnectionRoute extends _i7.PageRouteInfo<void> {
+  const NoConnectionRoute({List<_i7.PageRouteInfo>? children})
+      : super(
+          NoConnectionRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NoConnectionRoute';
+
+  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i2.LoadingView]
+class LoadingRoute extends _i7.PageRouteInfo<void> {
+  const LoadingRoute({List<_i7.PageRouteInfo>? children})
+      : super(
+          LoadingRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'LoadingRoute';
+
+  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i3.NoDataView]
+class NoDataRoute extends _i7.PageRouteInfo<void> {
+  const NoDataRoute({List<_i7.PageRouteInfo>? children})
+      : super(
+          NoDataRoute.name,
+          initialChildren: children,
+        );
+
+  static const String name = 'NoDataRoute';
+
+  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
+}
+
+/// generated route for
+/// [_i4.HomeView]
+class HomeRoute extends _i7.PageRouteInfo<void> {
+  const HomeRoute({List<_i7.PageRouteInfo>? children})
       : super(
           HomeRoute.name,
-          path: '/home',
+          initialChildren: children,
         );
 
   static const String name = 'HomeRoute';
+
+  static const _i7.PageInfo<void> page = _i7.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [OrderView]
-class OrderRoute extends PageRouteInfo<OrderRouteArgs> {
+/// [_i5.OrderView]
+class OrderRoute extends _i7.PageRouteInfo<OrderRouteArgs> {
   OrderRoute({
-    Key? key,
+    _i8.Key? key,
     required int totalMoney,
     required List<dynamic> isSelectedFood,
     required List<dynamic> eachFoodPrice,
+    List<_i7.PageRouteInfo>? children,
   }) : super(
           OrderRoute.name,
-          path: '/order',
           args: OrderRouteArgs(
             key: key,
             totalMoney: totalMoney,
             isSelectedFood: isSelectedFood,
             eachFoodPrice: eachFoodPrice,
           ),
+          initialChildren: children,
         );
 
   static const String name = 'OrderRoute';
+
+  static const _i7.PageInfo<OrderRouteArgs> page =
+      _i7.PageInfo<OrderRouteArgs>(name);
 }
 
 class OrderRouteArgs {
@@ -112,7 +164,7 @@ class OrderRouteArgs {
     required this.eachFoodPrice,
   });
 
-  final Key? key;
+  final _i8.Key? key;
 
   final int totalMoney;
 
@@ -127,21 +179,25 @@ class OrderRouteArgs {
 }
 
 /// generated route for
-/// [PaymentPageView]
-class PaymentPageRoute extends PageRouteInfo<PaymentPageRouteArgs> {
+/// [_i6.PaymentPageView]
+class PaymentPageRoute extends _i7.PageRouteInfo<PaymentPageRouteArgs> {
   PaymentPageRoute({
-    Key? key,
+    _i8.Key? key,
     required int totalFee,
+    List<_i7.PageRouteInfo>? children,
   }) : super(
           PaymentPageRoute.name,
-          path: '/payment',
           args: PaymentPageRouteArgs(
             key: key,
             totalFee: totalFee,
           ),
+          initialChildren: children,
         );
 
   static const String name = 'PaymentPageRoute';
+
+  static const _i7.PageInfo<PaymentPageRouteArgs> page =
+      _i7.PageInfo<PaymentPageRouteArgs>(name);
 }
 
 class PaymentPageRouteArgs {
@@ -150,7 +206,7 @@ class PaymentPageRouteArgs {
     required this.totalFee,
   });
 
-  final Key? key;
+  final _i8.Key? key;
 
   final int totalFee;
 

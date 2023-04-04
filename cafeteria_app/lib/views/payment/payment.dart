@@ -1,13 +1,15 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/product/init/app_localization.dart';
-import 'package:cafeteria_app/product/widget/text/title_text.dart';
+import '../../product/init/app_localization.dart';
+import '../../product/widget/text/title_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../product/constant/product_const_shelf.dart';
+import '../../product/navigator/app_router.gr.dart';
 import '../../product/widget/widgets_shelf.dart';
 import '../home/home_shelf.dart';
 
+@RoutePage()
 class PaymentPageView extends StatefulWidget {
   int totalFee = 0;
   PaymentPageView({
@@ -121,7 +123,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
           context.read<HomeCubit>().isSelectFood.clear();
           context.read<HomeCubit>().eachFoodPrice.clear();
           context.read<HomeCubit>().totalPay = 0;
-          context.router.pushNamed('/home');
+          context.pushRoute(const HomeRoute());
         },
       ),
     );

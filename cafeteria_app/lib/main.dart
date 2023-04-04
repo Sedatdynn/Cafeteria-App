@@ -1,14 +1,14 @@
 import 'dart:io';
-import 'product/init/app_localization.dart';
-import 'views/home/cubit/localeCubit/locale_cubit.dart';
-import 'package:flutter_bloc/src/bloc_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'core/theme/theme_color_shelf.dart';
+import 'product/init/app_localization.dart';
 import 'product/navigator/app_router.dart';
 import 'product/widget/widgets_shelf.dart';
+import 'views/home/cubit/localeCubit/locale_cubit.dart';
 import 'views/home/home_shelf.dart';
 
 void main() {
@@ -18,13 +18,31 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
   MyApp({super.key});
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: appProviders,
+        providers: [
+          BlocProvider(
+            create: (context) {
+              return LocaleCubit()..getSavedLanguage();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return InternetCubit()..checkConnection();
+            },
+          ),
+          BlocProvider(
+            create: (context) {
+              return HomeCubit(GeneralService(
+                  ProjectNetworkManager.instance.service, "QFj-hS"))
+                ..fetchAllProduct();
+            },
+          ),
+        ],
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, state) {
             if (state is LocaleInitial) {
@@ -39,8 +57,7 @@ class MyApp extends StatelessWidget {
             } else if (state is ChangeLocaleState) {
               return MaterialApp.router(
                 locale: state.locale,
-                routerDelegate: _appRouter.delegate(),
-                routeInformationParser: _appRouter.defaultRouteParser(),
+                routerConfig: _appRouter.config(),
                 debugShowCheckedModeBanner: false,
                 title: "cafeteria".tr(context),
                 supportedLocales: const [Locale('en'), Locale('tr')],
@@ -67,27 +84,5 @@ class MyApp extends StatelessWidget {
             return const NoDataView();
           },
         ));
-  }
-
-  List<BlocProviderSingleChildWidget> get appProviders {
-    return [
-      BlocProvider(
-        create: (context) {
-          return LocaleCubit()..getSavedLanguage();
-        },
-      ),
-      BlocProvider(
-        create: (context) {
-          return InternetCubit()..checkConnection();
-        },
-      ),
-      BlocProvider(
-        create: (context) {
-          return HomeCubit(
-              GeneralService(ProjectNetworkManager.instance.service, "QFj-hS"))
-            ..fetchAllProduct();
-        },
-      ),
-    ];
   }
 }

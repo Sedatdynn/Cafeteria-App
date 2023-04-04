@@ -1,21 +1,22 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/product/init/app_localization.dart';
-import '../../../product/constant/product_const_shelf.dart';
-import '../../../product/extension/images/jpg_extension.dart';
-import '../../../product/widget/text/title_text.dart';
-import '../cubit/localeCubit/locale_cubit.dart';
-import '../home_shelf.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/theme/theme_color_shelf.dart';
+import '../../../product/constant/product_const_shelf.dart';
 import '../../../product/enums/imageEnum/image_enums.dart';
-import '../../../product/navigator/app_router.dart';
+import '../../../product/extension/images/jpg_extension.dart';
+import '../../../product/init/app_localization.dart';
+import '../../../product/navigator/app_router.gr.dart';
+import '../../../product/widget/text/title_text.dart';
 import '../../../product/widget/widgets_shelf.dart';
 import '../../drawer/drawer.dart';
+import '../cubit/localeCubit/locale_cubit.dart';
+import '../home_shelf.dart';
 
+@RoutePage()
 class HomeView extends StatefulWidget {
   const HomeView({Key? key}) : super(key: key);
   @override
@@ -88,11 +89,7 @@ class _HomeViewState extends State<HomeView> {
   void buildInternetConnection(BuildContext context, InternetConnected state) {
     ScaffoldMessenger.of(context).showSnackBar(buildConnectedSnackBar(state));
     context.read<HomeCubit>().fetchAllProduct();
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const HomeView(),
-        ));
+    context.pushRoute(const HomeRoute());
   }
 
   SnackBar buildConnectedSnackBar(InternetConnected state) =>
@@ -112,11 +109,7 @@ class _HomeViewState extends State<HomeView> {
           CupertinoDialogAction(
               child: ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) {
-                        return const NoConnectionView();
-                      },
-                    ));
+                    context.pushRoute(const NoConnectionRoute());
                   },
                   child: Text("ok".tr(context))))
         ],
@@ -210,7 +203,7 @@ class _HomeViewState extends State<HomeView> {
       label: "payment".tr(context),
       onPressed: () {
         context.read<HomeCubit>().totalPay > 0
-            ? context.router.navigate(OrderRoute(
+            ? context.pushRoute(OrderRoute(
                 totalMoney: totalMoney,
                 isSelectedFood: selectedFood,
                 eachFoodPrice: eachFoodPrice))

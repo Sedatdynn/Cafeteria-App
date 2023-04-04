@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cafeteria_app/product/init/app_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -9,10 +8,12 @@ import '../../core/theme/theme_color_shelf.dart';
 import '../../product/constant/product_const_shelf.dart';
 import '../../product/enums/imageEnum/image_enums.dart';
 import '../../product/extension/images/png_extension.dart';
-import '../../product/navigator/app_router.dart';
+import '../../product/init/app_localization.dart';
+import '../../product/navigator/app_router.gr.dart';
 import '../../product/widget/widgets_shelf.dart';
 import '../home/home_shelf.dart';
 
+@RoutePage()
 class OrderView extends StatefulWidget {
   final int totalMoney;
   final List isSelectedFood;
@@ -136,8 +137,8 @@ class _OrderViewState extends State<OrderView> {
   buildCreditCardButton(BuildContext context) {
     return CardButton(
         text: "creditCard".tr(context),
-        onPressed: () => context.router
-            .navigate(PaymentPageRoute(totalFee: widget.totalMoney)),
+        onPressed: () =>
+            context.pushRoute(PaymentPageRoute(totalFee: widget.totalMoney)),
         icon: ImagePaths.card.toPngImage(context));
   }
 
@@ -164,7 +165,8 @@ class _OrderViewState extends State<OrderView> {
           clearSelectedFood;
           clearEachFoodPrice;
           cubit.totalPay = 0;
-          context.router.pushNamed("/home");
+
+          context.pushRoute(const HomeRoute());
         }
       }
     } else {

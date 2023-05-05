@@ -11,6 +11,8 @@ class LocaleCubit extends Cubit<LocaleState> {
   Future<void> getSavedLanguage() async {
     final String cachedLanguageCode =
         await LanguageCacheHelper().getCachedLanguageCode();
+    print(cachedLanguageCode);
+
     emit(ChangeLocaleState(locale: Locale(cachedLanguageCode)));
   }
 

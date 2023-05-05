@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cafeteria_app/core/init/cache/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -10,8 +11,9 @@ import 'product/widget/materialApp/loadingMaterial/loading_material.dart';
 import 'product/widget/widgets_shelf.dart';
 import 'views/home/cubit/localeCubit/locale_cubit.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocaleManager.preferencesInit();
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
@@ -23,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: ProviderList.instance.providerList,
+        providers: ProviderList.providers,
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, state) {
             if (state is LocaleInitial) {

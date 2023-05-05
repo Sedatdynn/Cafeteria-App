@@ -2,8 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../../core/init/cache/cache_manager.dart';
 import '../../../core/theme/theme_color_shelf.dart';
 import '../../../product/constant/product_const_shelf.dart';
 import '../../../product/enums/imageEnum/image_enums.dart';
@@ -24,7 +24,6 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  SharedPreferences? prefs;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -78,9 +77,9 @@ class _HomeViewState extends State<HomeView> {
           child: Text(items),
         );
       }).toList(),
-      onChanged: (String? newValue) {
+      onChanged: (String? newValue) async {
         if (newValue != null) {
-          context.read<LocaleCubit>().changeLanguage(newValue);
+          await context.read<LocaleCubit>().changeLanguage(newValue);
         }
       },
     );
@@ -232,8 +231,6 @@ class _HomeViewState extends State<HomeView> {
           ),
           child: InkWell(
             onTap: () async {
-              prefs = await SharedPreferences.getInstance();
-
               checkSelectFee(items, index, context);
             },
             child: Container(
@@ -261,20 +258,18 @@ class _HomeViewState extends State<HomeView> {
   }
 
   bool getSelect(String key) {
-    bool select = prefs?.getBool(key) ?? false;
+    bool select = LocaleManager.instance.getBoolValue(key) ?? false;
     return select;
   }
 
   void checkSelectFee(
       List<Foods?> items, int index, BuildContext context) async {
-    prefs = await SharedPreferences.getInstance();
-
     correctCheck() async {
-      await prefs?.setBool(items[index]!.fname!, true);
+      await LocaleManager.instance.setBoolValue(items[index]!.fname!, true);
     }
 
     falseCheck() async {
-      await prefs?.setBool(items[index]!.fname!, false);
+      await LocaleManager.instance.setBoolValue(items[index]!.fname!, false);
     }
 
     return setState(() {
@@ -300,9 +295,9 @@ class _HomeViewState extends State<HomeView> {
         context.read<HomeCubit>().eachFoodPrice.remove(items[index]!.price);
 
         context.read<HomeCubit>().totalPay -= items[index]!.price!;
-        prefs!.remove(items[index]!.fname!);
+        LocaleManager.instance.removeCacheValue(items[index]!.fname!);
       } else {
-        prefs!.remove(items[index]!.fname!);
+        LocaleManager.instance.removeCacheValue(items[index]!.fname!);
       }
     });
   }

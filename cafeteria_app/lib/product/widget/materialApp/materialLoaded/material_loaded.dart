@@ -1,5 +1,7 @@
+import 'package:cafeteria_app/product/init/app_local_helper.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/init/cache/cache_manager.dart';
 import '../../../../core/init/lang/language_delegates.dart';
 import '../../../../core/theme/color/colors.dart';
 import '../../../../views/home/cubit/localeCubit/locale_cubit.dart';
@@ -23,15 +25,15 @@ class MaterialLoaded extends StatelessWidget {
       title: "cafeteria".tr(context),
       supportedLocales: LanguageCore.instance.supportedLocales,
       localizationsDelegates: LanguageCore.instance.delegateList,
-      localeResolutionCallback: (deviceLocale, supportedLocales) {
-        for (var locale in supportedLocales) {
-          if (deviceLocale != null &&
-              deviceLocale.languageCode == locale.languageCode) {
-            return deviceLocale;
-          }
-        }
-        return supportedLocales.first;
-      },
+      // localeResolutionCallback: (deviceLocale, supportedLocales) {
+      //   for (var locale in supportedLocales) {
+      //     if (deviceLocale != null &&
+      //         deviceLocale.languageCode == locale.languageCode) {
+      //       return deviceLocale;
+      //     }
+      //   }
+      //   return supportedLocales.first;
+      // },
       theme: ThemeData(
         primarySwatch: AppColors.primarySwatch,
       ),

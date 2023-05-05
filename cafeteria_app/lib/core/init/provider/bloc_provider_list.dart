@@ -7,17 +7,7 @@ import '../../../views/home/service/items_service.dart';
 import '../../../views/home/service/network_manager.dart';
 
 class ProviderList {
-  static ProviderList? _instance;
-  static ProviderList get instance {
-    _instance ??= ProviderList._init();
-    return _instance!;
-  }
-
-  ProviderList._init();
-
-  get providerList => _providers;
-
-  static get _providers => [
+  static get providers => [
         BlocProvider(
           create: (context) {
             return LocaleCubit()..getSavedLanguage();

@@ -1,14 +1,13 @@
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cafeteria_app/core/init/cache/cache_manager.dart';
 
 class LanguageCacheHelper {
   Future<void> cacheLanguageCode(String languageCode) async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("LOCALE", languageCode);
+    LocaleManager.instance.setStringValue("LOCALE", languageCode);
   }
 
   Future<String> getCachedLanguageCode() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
-    final cachedLanguageCode = sharedPreferences.getString("LOCALE");
+    final cachedLanguageCode =
+        await LocaleManager.instance.getStringValue("LOCALE");
     if (cachedLanguageCode != null) {
       return cachedLanguageCode;
     } else {

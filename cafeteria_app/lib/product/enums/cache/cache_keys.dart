@@ -1,8 +1,5 @@
 enum CacheKeys {
-  LOCALE("LOCALE");
-
-  final String value;
-  const CacheKeys(this.value);
+  LOCALE;
 
   String get rawValue => name;
 }

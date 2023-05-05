@@ -25,15 +25,6 @@ class MaterialLoaded extends StatelessWidget {
       title: "cafeteria".tr(context),
       supportedLocales: LanguageCore.instance.supportedLocales,
       localizationsDelegates: LanguageCore.instance.delegateList,
-      // localeResolutionCallback: (deviceLocale, supportedLocales) {
-      //   for (var locale in supportedLocales) {
-      //     if (deviceLocale != null &&
-      //         deviceLocale.languageCode == locale.languageCode) {
-      //       return deviceLocale;
-      //     }
-      //   }
-      //   return supportedLocales.first;
-      // },
       theme: ThemeData(
         primarySwatch: AppColors.primarySwatch,
       ),

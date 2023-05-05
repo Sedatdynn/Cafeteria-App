@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: ProviderList.providers,
+        providers: ProviderList.instance.providers,
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, state) {
             if (state is LocaleInitial) {

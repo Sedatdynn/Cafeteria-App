@@ -108,86 +108,46 @@ This is the starting point of the application. All the application level configu
 
 ```dart
 import 'dart:io';
-import 'package:cafeteria_app/product/init/app_localization.dart';
-import 'package:cafeteria_app/views/home/cubit/localeCubit/locale_cubit.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'core/init/cache/cache_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'core/theme/theme_color_shelf.dart';
+import 'core/init/provider/bloc_provider_list.dart';
 import 'product/navigator/app_router.dart';
+import 'product/widget/materialApp/materialLoaded/material_loaded.dart';
+import 'product/widget/materialApp/loadingMaterial/loading_material.dart';
 import 'product/widget/widgets_shelf.dart';
-import 'views/home/home_shelf.dart';
+import 'views/home/cubit/localeCubit/locale_cubit.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await LocaleManager.preferencesInit();
   HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final _appRouter = AppRouter();
   MyApp({super.key});
+  final _appRouter = AppRouter();
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) {
-              return LocaleCubit()..getSavedLanguage();
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              return InternetCubit()..checkConnection();
-            },
-          ),
-          BlocProvider(
-            create: (context) {
-              return HomeCubit(GeneralService(
-                  ProjectNetworkManager.instance.service, "QFj-hS"))
-                ..fetchAllProduct();
-            },
-          ),
-        ],
+        providers: ProviderList.instance.providers,
         child: BlocBuilder<LocaleCubit, LocaleState>(
           builder: (context, state) {
             if (state is LocaleInitial) {
-              return const LoadingView();
+              return const LoadingMaterial();
             } else if (state is ChangeLocaleState) {
-              return MaterialApp.router(
-                locale: state.locale,
-                routerDelegate: _appRouter.delegate(),
-                routeInformationParser: _appRouter.defaultRouteParser(),
-                debugShowCheckedModeBanner: false,
-                title: "cafeteria".tr(context),
-                supportedLocales: const [Locale('en'), Locale('tr')],
-                localizationsDelegates: const [
-                  AppLocalizations.delegate,
-                  GlobalMaterialLocalizations.delegate,
-                  GlobalWidgetsLocalizations.delegate,
-                  GlobalCupertinoLocalizations.delegate
-                ],
-                localeResolutionCallback: (deviceLocale, supportedLocales) {
-                  for (var locale in supportedLocales) {
-                    if (deviceLocale != null &&
-                        deviceLocale.languageCode == locale.languageCode) {
-                      return deviceLocale;
-                    }
-                  }
-                  return supportedLocales.first;
-                },
-                theme: ThemeData(
-                  primarySwatch: AppColors.primarySwatch,
-                ),
-              );
+              return MaterialLoaded(state: state, appRouter: _appRouter);
             }
             return const NoDataView();
           },
         ));
   }
 }
+
 
 ```
   

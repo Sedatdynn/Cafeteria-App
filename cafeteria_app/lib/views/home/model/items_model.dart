@@ -1,23 +1,30 @@
+import 'package:cafeteria_app/core/init/base/model/base_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part "items_model.g.dart";
 
-@JsonSerializable()
-class ItemsModel {
+@JsonSerializable(createToJson: false)
+class ItemsModel extends BaseModel<ItemsModel> {
   List<Days>? days;
 
   ItemsModel({this.days});
 
-  factory ItemsModel.fromJson(Map<String, dynamic> json) {
-    return _$ItemsModelFromJson(json);
+  Map<String, dynamic>? toJson() {
+    return null;
   }
 
-  Map<String, dynamic> toJson() {
-    return _$ItemsModelToJson(this);
+  @override
+  ItemsModel createObject() {
+    return ItemsModel();
+  }
+
+  @override
+  ItemsModel fromJson(Map<String, dynamic> json) {
+    return _$ItemsModelFromJson(json);
   }
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class Days {
   int? id;
   String? day;
@@ -28,13 +35,9 @@ class Days {
   factory Days.fromJson(Map<String, dynamic> json) {
     return _$DaysFromJson(json);
   }
-
-  Map<String, dynamic> toJson() {
-    return _$DaysToJson(this);
-  }
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class Contents {
   String? name;
   List<Foods>? foods;
@@ -44,13 +47,9 @@ class Contents {
   factory Contents.fromJson(Map<String, dynamic> json) {
     return _$ContentsFromJson(json);
   }
-
-  Map<String, dynamic> toJson() {
-    return _$ContentsToJson(this);
-  }
 }
 
-@JsonSerializable()
+@JsonSerializable(createToJson: false)
 class Foods {
   String? fname;
   int? price;
@@ -60,9 +59,5 @@ class Foods {
 
   factory Foods.fromJson(Map<String, dynamic> json) {
     return _$FoodsFromJson(json);
-  }
-
-  Map<String, dynamic> toJson() {
-    return _$FoodsToJson(this);
   }
 }

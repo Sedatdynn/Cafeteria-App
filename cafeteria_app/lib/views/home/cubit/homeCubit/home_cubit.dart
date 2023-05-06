@@ -1,12 +1,12 @@
 import 'package:bloc/bloc.dart';
+import 'package:cafeteria_app/views/home/service/i_home_service.dart';
 import 'package:intl/intl.dart';
 import '../../model/items_model.dart';
-import '../../service/items_service.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this.generalService) : super(HomeInitial());
-  final IGeneralService generalService;
+  HomeCubit(this.homeService) : super(HomeInitial());
+  final IHomeService homeService;
 
   List<Foods?> allProduct = [];
   int index = 0;
@@ -22,7 +22,7 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> fetchAllProduct() async {
     try {
       emit(HomeLoading());
-      final list = await generalService.fetchProductItems(index);
+      final list = await homeService.fetchProductItems(index);
       allProduct = list;
       emit(HomeLoaded(allProduct, index));
     } catch (e) {

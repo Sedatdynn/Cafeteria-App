@@ -1,8 +1,9 @@
+import 'package:cafeteria_app/product/constant/app/app_constant.dart';
 import 'package:dio/dio.dart';
 
-class ProjectNetworkManager {
+class ProjectNetworkManager with AppConstants {
   ProjectNetworkManager._() {
-    _dio = Dio(BaseOptions(baseUrl: "https://api.jsonserve.com"));
+    _dio = Dio(BaseOptions(baseUrl: baseUrl));
   }
   late final Dio _dio;
 

@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../views/home/cubit/homeCubit/home_cubit.dart';
 import '../../../views/home/cubit/internetCubit/internet_cubit.dart';
 import '../../../views/home/cubit/localeCubit/locale_cubit.dart';
-import '../../../views/home/service/items_service.dart';
-import '../../../views/home/service/network_manager.dart';
+import '../../../views/home/service/home_service.dart';
+import '../../../product/constant/service/network_manager.dart';
 
 class ProviderList {
   static ProviderList? _instance;
@@ -30,8 +30,9 @@ class ProviderList {
         ),
         BlocProvider(
           create: (context) {
-            return HomeCubit(GeneralService(
-                ProjectNetworkManager.instance.service, "QFj-hS"))
+            return HomeCubit(HomeService(
+              ProjectNetworkManager.instance.service,
+            ))
               ..fetchAllProduct();
           },
         ),

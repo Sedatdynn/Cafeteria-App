@@ -1,33 +1,20 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:cafeteria_app/product/constant/app/app_constant.dart';
+import 'package:cafeteria_app/views/home/service/i_home_service.dart';
 import 'package:intl/intl.dart';
 import '../model/items_model.dart';
 
-abstract class IGeneralService {
-  IGeneralService(
-    this.dio,
-    this.item,
-  );
-  final Dio dio;
-  String item;
-
-  dynamic fetchProductItems(int index);
-}
-
-class GeneralService extends IGeneralService {
-  GeneralService(
-    super.dio,
-    super.item,
-  );
+class HomeService extends IHomeService with AppConstants {
+  HomeService(super.dio);
 
   @override
   Future<dynamic> fetchProductItems(int index) async {
     try {
-      final response = await dio.get("/$item");
+      final response = await dio.get(itemValue);
       if (response.statusCode == HttpStatus.ok) {
         final jsonBody = response.data;
         if (jsonBody is Map<String, dynamic>) {
-          final modelData = ItemsModel.fromJson(jsonBody);
+          final modelData = ItemsModel().fromJson(jsonBody);
           final DateTime now = DateTime.now();
           String today = DateFormat('EEEEE', 'en_US').format(now);
           final List days = [

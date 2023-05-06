@@ -12,11 +12,6 @@ ItemsModel _$ItemsModelFromJson(Map<String, dynamic> json) => ItemsModel(
           .toList(),
     );
 
-Map<String, dynamic> _$ItemsModelToJson(ItemsModel instance) =>
-    <String, dynamic>{
-      'days': instance.days,
-    };
-
 Days _$DaysFromJson(Map<String, dynamic> json) => Days(
       id: json['id'] as int?,
       day: json['day'] as String?,
@@ -25,12 +20,6 @@ Days _$DaysFromJson(Map<String, dynamic> json) => Days(
           .toList(),
     );
 
-Map<String, dynamic> _$DaysToJson(Days instance) => <String, dynamic>{
-      'id': instance.id,
-      'day': instance.day,
-      'contents': instance.contents,
-    };
-
 Contents _$ContentsFromJson(Map<String, dynamic> json) => Contents(
       name: json['name'] as String?,
       foods: (json['foods'] as List<dynamic>?)
@@ -38,19 +27,8 @@ Contents _$ContentsFromJson(Map<String, dynamic> json) => Contents(
           .toList(),
     );
 
-Map<String, dynamic> _$ContentsToJson(Contents instance) => <String, dynamic>{
-      'name': instance.name,
-      'foods': instance.foods,
-    };
-
 Foods _$FoodsFromJson(Map<String, dynamic> json) => Foods(
       fname: json['fname'] as String?,
       price: json['price'] as int?,
       isSelected: json['isSelected'] as bool?,
     );
-
-Map<String, dynamic> _$FoodsToJson(Foods instance) => <String, dynamic>{
-      'fname': instance.fname,
-      'price': instance.price,
-      'isSelected': instance.isSelected,
-    };

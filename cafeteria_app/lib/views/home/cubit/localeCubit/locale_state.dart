@@ -1,13 +1,32 @@
-part of 'locale_cubit.dart';
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
-@immutable
-abstract class LocaleState {}
+class LocaleState extends Equatable {
+  const LocaleState({this.locale, this.isLoading});
 
-class LocaleInitial extends LocaleState {}
+  final Locale? locale;
+  final bool? isLoading;
 
-class ChangeLocaleState extends LocaleState {
-  final Locale locale;
-  ChangeLocaleState({
-    required this.locale,
-  });
+  @override
+  List<Object?> get props => [locale, isLoading];
+
+  LocaleState copyWith({
+    Locale? locale,
+    bool? isLoading,
+  }) {
+    return LocaleState(
+      locale: locale ?? this.locale,
+      isLoading: isLoading ?? this.isLoading,
+    );
+  }
 }
+
+// class LocaleInitial extends LocaleState {}
+
+// class ChangeLocaleState extends LocaleState {
+//   final Locale locale;
+//   ChangeLocaleState({
+//     required this.locale,
+//   });
+// }

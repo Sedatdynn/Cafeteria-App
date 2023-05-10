@@ -13,8 +13,9 @@ class HomeService extends IHomeService with AppConstants {
       final response = await dio.get(itemValue);
       if (response.statusCode == HttpStatus.ok) {
         final jsonBody = response.data;
+
         if (jsonBody is Map<String, dynamic>) {
-          final modelData = ItemsModel().fromJson(jsonBody);
+          final modelData = ItemsModel.fromJson(jsonBody);
           final DateTime now = DateTime.now();
           String today = DateFormat('EEEEE', 'en_US').format(now);
           final List days = [

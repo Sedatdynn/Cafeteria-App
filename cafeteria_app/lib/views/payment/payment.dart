@@ -16,13 +16,16 @@ class PaymentPageView extends StatefulWidget {
     Key? key,
     required this.totalFee,
   }) : super(key: key);
+
   @override
   State<PaymentPageView> createState() => _PaymentPageViewState();
 }
 
 class _PaymentPageViewState extends State<PaymentPageView> {
   TextEditingController cardController = TextEditingController();
+
   TextEditingController cvcController = TextEditingController();
+
   TextEditingController dateController = TextEditingController();
 
   @override

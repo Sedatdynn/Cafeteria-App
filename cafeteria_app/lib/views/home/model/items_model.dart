@@ -5,7 +5,7 @@ part "items_model.g.dart";
 
 @JsonSerializable(createToJson: false)
 class ItemsModel extends BaseModel<ItemsModel> {
-  List<Days>? days;
+  final List<Days>? days;
 
   ItemsModel({this.days});
 
@@ -14,50 +14,80 @@ class ItemsModel extends BaseModel<ItemsModel> {
   }
 
   @override
-  ItemsModel createObject() {
-    return ItemsModel();
+  factory ItemsModel.fromJson(Map<String, dynamic> json) {
+    return _$ItemsModelFromJson(json);
   }
 
   @override
+  List<Object?> get props => [];
+
+  @override
   ItemsModel fromJson(Map<String, dynamic> json) {
-    return _$ItemsModelFromJson(json);
+    return fromJson(json);
   }
 }
 
 @JsonSerializable(createToJson: false)
-class Days {
-  int? id;
-  String? day;
-  List<Contents>? contents;
+class Days extends BaseModel<Days> {
+  final int? id;
+  final String? day;
+  final List<Contents>? contents;
 
   Days({this.id, this.day, this.contents});
 
+  @override
   factory Days.fromJson(Map<String, dynamic> json) {
     return _$DaysFromJson(json);
   }
-}
 
-@JsonSerializable(createToJson: false)
-class Contents {
-  String? name;
-  List<Foods>? foods;
+  @override
+  List<Object?> get props => [id, day, contents];
 
-  Contents({this.name, this.foods});
-
-  factory Contents.fromJson(Map<String, dynamic> json) {
-    return _$ContentsFromJson(json);
+  @override
+  Days fromJson(Map<String, dynamic> json) {
+    return fromJson(json);
   }
 }
 
 @JsonSerializable(createToJson: false)
-class Foods {
-  String? fname;
-  int? price;
+class Contents extends BaseModel<Contents> {
+  final String? name;
+  final List<Foods>? foods;
+
+  Contents({this.name, this.foods});
+
+  @override
+  factory Contents.fromJson(Map<String, dynamic> json) {
+    return _$ContentsFromJson(json);
+  }
+
+  @override
+  List<Object?> get props => [name, foods];
+
+  @override
+  Contents fromJson(Map<String, dynamic> json) {
+    return fromJson(json);
+  }
+}
+
+@JsonSerializable(createToJson: false)
+class Foods extends BaseModel<Foods> {
+  final String? fname;
+  final int? price;
   bool? isSelected;
 
   Foods({this.fname, this.price, this.isSelected});
 
+  @override
   factory Foods.fromJson(Map<String, dynamic> json) {
     return _$FoodsFromJson(json);
+  }
+
+  @override
+  List<Object?> get props => [fname, price, isSelected];
+
+  @override
+  Foods fromJson(Map<String, dynamic> json) {
+    return fromJson(json);
   }
 }

@@ -1,8 +1,8 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:flutter/material.dart';
 
 import '../../../core/theme/color/colors.dart';
 import '../../constant/product_const_shelf.dart';
-import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget with PreferredSizeWidget {
   final BuildContext context;

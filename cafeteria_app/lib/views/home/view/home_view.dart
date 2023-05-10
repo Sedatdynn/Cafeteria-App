@@ -14,6 +14,7 @@ import '../../../product/widget/text/title_text.dart';
 import '../../../product/widget/widgets_shelf.dart';
 import '../../drawer/drawer.dart';
 import '../cubit/localeCubit/locale_cubit.dart';
+import '../cubit/localeCubit/locale_state.dart';
 import '../home_shelf.dart';
 
 @RoutePage()
@@ -33,10 +34,7 @@ class _HomeViewState extends State<HomeView> {
           actions: [
             BlocBuilder<LocaleCubit, LocaleState>(
               builder: (context, state) {
-                if (state is ChangeLocaleState) {
-                  return DropDownButtonWidget(state, context);
-                }
-                return const SizedBox();
+                return dropDownButtonWidget(state, context);
               },
             )
           ],
@@ -66,10 +64,10 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  DropdownButton<String> DropDownButtonWidget(
-      ChangeLocaleState state, BuildContext context) {
+  DropdownButton<String> dropDownButtonWidget(
+      LocaleState state, BuildContext context) {
     return DropdownButton<String>(
-      value: state.locale.languageCode,
+      value: state.locale.toString(),
       icon: const Icon(Icons.keyboard_arrow_down),
       items: ['tr', 'en'].map((String items) {
         return DropdownMenuItem<String>(

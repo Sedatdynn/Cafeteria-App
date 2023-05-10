@@ -1,9 +1,9 @@
 import 'package:cafeteria_app/product/init/app_localization.dart';
+import 'package:cafeteria_app/views/home/cubit/localeCubit/locale_state.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/init/lang/language_delegates.dart';
 import '../../../../core/theme/color/colors.dart';
-import '../../../../views/home/cubit/localeCubit/locale_cubit.dart';
 import '../../../navigator/app_router.dart';
 
 class MaterialLoaded extends StatelessWidget {
@@ -12,7 +12,7 @@ class MaterialLoaded extends StatelessWidget {
       : _appRouter = appRouter;
 
   final AppRouter _appRouter;
-  final ChangeLocaleState state;
+  final LocaleState state;
 
   @override
   Widget build(BuildContext context) {

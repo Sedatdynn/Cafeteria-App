@@ -166,7 +166,9 @@ class _OrderViewState extends State<OrderView> {
           clearEachFoodPrice;
           cubit.totalPay = 0;
 
-          context.pushRoute(const HomeRoute());
+          if (context.mounted) {
+            context.pushRoute(const HomeRoute());
+          }
         }
       }
     } else {

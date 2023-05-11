@@ -43,17 +43,15 @@ class _HomeViewState extends State<HomeView> {
         backgroundColor: AppColors.lightGrey,
         body: BlocListener<InternetCubit, InternetState>(
           listener: (context, state) {
-            if (state is InternetConnected) {
-              buildInternetConnection(context, state);
-            } else if (state is InternetNotConnected) {
-              buildNotConnectedDialog(context, state);
-            }
+            (state.isConnect ?? false)
+                ? buildInternetConnection(context, state)
+                : buildNotConnectedDialog(context, state);
           },
           child: BlocBuilder<HomeCubit, HomeState>(
             builder: (context, state) {
-              if (state is HomeLoading || state is HomeInitial) {
+              if (state.isLoading ?? true) {
                 return const LoadingView();
-              } else if (state is HomeLoaded) {
+              } else if (state.items!.isNotEmpty) {
                 return buildMainBody(context);
               }
               return const NoDataView();
@@ -83,21 +81,17 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  void buildInternetConnection(BuildContext context, InternetConnected state) {
-    ScaffoldMessenger.of(context).showSnackBar(buildConnectedSnackBar(state));
+  void buildInternetConnection(BuildContext context, InternetState state) {
     context.read<HomeCubit>().fetchAllProduct();
     context.pushRoute(const HomeRoute());
   }
 
-  SnackBar buildConnectedSnackBar(InternetConnected state) =>
-      SnackBar(content: Text(state.message));
-
   Future<dynamic> buildNotConnectedDialog(
-      BuildContext context, InternetNotConnected state) {
+      BuildContext context, InternetState state) {
     return showDialog(
       context: context,
       builder: (context) => CupertinoAlertDialog(
-        title: Text(state.message),
+        title: Text(state.message!),
         content: Image.asset(
           AppConstantImage.instance.constImagePath,
           height: context.dynamicHeight(0.1),
@@ -114,10 +108,10 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  SingleChildScrollView buildMainBody(BuildContext context) {
-    return SingleChildScrollView(
-      child: Padding(
-        padding: context.midAllPadding,
+  Widget buildMainBody(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: SingleChildScrollView(
         child: Column(
           children: [
             Row(

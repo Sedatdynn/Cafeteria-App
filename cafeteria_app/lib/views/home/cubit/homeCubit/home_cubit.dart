@@ -5,7 +5,7 @@ import '../../model/items_model.dart';
 import 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit(this.homeService) : super(HomeInitial());
+  HomeCubit(this.homeService) : super(const HomeState());
   final IHomeService homeService;
 
   List<Foods?> allProduct = [];
@@ -16,17 +16,17 @@ class HomeCubit extends Cubit<HomeState> {
   void changeIndex(int editI) {
     index = editI;
     fetchAllProduct();
-    emit(HomeLoaded(allProduct, index));
+    emit(state.copyWith(items: allProduct, index: index));
   }
 
   Future<void> fetchAllProduct() async {
     try {
-      emit(HomeLoading());
+      emit(state.copyWith(isLoading: true));
       final list = await homeService.fetchProductItems(index);
       allProduct = list;
-      emit(HomeLoaded(allProduct, index));
+      emit(state.copyWith(items: allProduct, index: index, isLoading: false));
     } catch (e) {
-      emit(HomeError(e.toString()));
+      emit(state.copyWith(message: e.toString()));
     }
   }
 

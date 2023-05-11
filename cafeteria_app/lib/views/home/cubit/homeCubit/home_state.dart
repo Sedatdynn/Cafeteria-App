@@ -1,21 +1,34 @@
-import 'package:cafeteria_app/views/home/model/items_model.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class HomeState {}
+import '../../model/items_model.dart';
 
-class HomeInitial extends HomeState {}
+class HomeState extends Equatable {
+  final List<Foods?>? items;
+  final String? message;
+  final bool? isLoading;
+  final int? index;
 
-class HomeLoading extends HomeState {}
-
-class HomeLoaded extends HomeState {
-  final List<Foods?> items;
-  final int index;
-  HomeLoaded(
+  const HomeState({
     this.items,
+    this.message,
+    this.isLoading,
     this.index,
-  );
-}
+  });
 
-class HomeError extends HomeState {
-  final String message;
-  HomeError(this.message);
+  @override
+  List<Object?> get props => [items, message, isLoading, index];
+
+  HomeState copyWith({
+    List<Foods?>? items,
+    String? message,
+    bool? isLoading,
+    int? index,
+  }) {
+    return HomeState(
+      items: items ?? this.items,
+      message: message ?? this.message,
+      isLoading: isLoading ?? this.isLoading,
+      index: index ?? this.index,
+    );
+  }
 }

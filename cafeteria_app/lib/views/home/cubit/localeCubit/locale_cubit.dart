@@ -8,10 +8,11 @@ class LocaleCubit extends Cubit<LocaleState> {
   LocaleCubit() : super(const LocaleState());
 
   Future<void> getSavedLanguage() async {
+    changeLoading();
     final String cachedLanguageCode =
         await LanguageCacheHelper().getCachedLanguageCode();
     emit(state.copyWith(locale: Locale(cachedLanguageCode)));
-    // emit(ChangeLocaleState(locale: Locale(cachedLanguageCode)));
+    changeLoading();
   }
 
   Future changeLanguage(String languageCode) async {
@@ -21,7 +22,6 @@ class LocaleCubit extends Cubit<LocaleState> {
     changeLoading();
   }
 
-  // emit(ChangeLocaleState(locale: Locale(languageCode)));
   void changeLoading() {
     emit(state.copyWith(isLoading: !(state.isLoading ?? false)));
   }

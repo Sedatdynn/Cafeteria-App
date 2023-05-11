@@ -1,17 +1,20 @@
 part of 'internet_cubit.dart';
 
-abstract class InternetState {}
+class InternetState extends Equatable {
+  const InternetState({this.message, this.isConnect});
+  final String? message;
+  final bool? isConnect;
 
-class InternetInitial extends InternetState {}
+  @override
+  List<Object?> get props => [message, isConnect];
 
-class InternetConnected extends InternetState {
-  final String message;
-
-  InternetConnected({required this.message});
-}
-
-class InternetNotConnected extends InternetState {
-  final String message;
-
-  InternetNotConnected({required this.message});
+  InternetState copyWith({
+    String? message,
+    bool? isConnect,
+  }) {
+    return InternetState(
+      message: message ?? this.message,
+      isConnect: isConnect ?? this.isConnect,
+    );
+  }
 }

@@ -1,8 +1,9 @@
-import 'package:cafeteria_app/product/init/app_localization.dart';
+import '../../../init/app_localization.dart';
+import '../../loading/widget_loading.dart';
+import '../../widgets_shelf.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/theme/color/colors.dart';
-import '../../loading/widget_loading.dart';
 
 class LoadingMaterial extends StatelessWidget {
   const LoadingMaterial({
